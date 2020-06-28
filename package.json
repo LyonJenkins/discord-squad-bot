@@ -1,0 +1,26 @@
+{
+  "name": "bbr-bot",
+  "version": "1.0.0",
+  "description": "* NodeJS\r * NPM",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LyonJenkins/bbr-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LyonJenkins/bbr-bot/issues"
+  },
+  "homepage": "https://github.com/LyonJenkins/bbr-bot#readme",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "eslint": "^7.3.1",
+    "got": "^11.3.0",
+    "rcon-client": "^4.2.0",
+    "web-api-steam": "^1.0.8"
+  }
+}
