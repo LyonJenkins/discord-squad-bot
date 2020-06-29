@@ -30,7 +30,9 @@ module.exports = {
 				)
 				.setTimestamp()
 				.setFooter('Server Status powered by Blueberries');
-			message.channel.send(serverEmbed);
+			message.channel.send(serverEmbed).then(msg => {
+				msg.react('🔄');
+			});
 		}).catch((error) => {
 			console.log(error);
 			console.log("Server is offline");
