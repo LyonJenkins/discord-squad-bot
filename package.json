@@ -22,7 +22,6 @@
     "gamedig": "^2.0.20",
     "got": "^11.3.0",
     "rcon-client": "^4.2.0",
-    "valve-master": "0.0.2",
     "web-api-steam": "^1.0.8"
   }
 }
