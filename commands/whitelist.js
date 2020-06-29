@@ -10,16 +10,19 @@ module.exports = {
     args: true,
     guildOnly: false,
     aliases: ['wl'],
+    permissions: [],
     execute(message, args) {
         let steamID = args[0];
-
+        message.delete({timeout: 1000});
         if(validURL(steamID)) {
           get64ID(args[0]).then(response => {
               if(response.response.steamid) {
                   steamID = response.response.steamid;
                   addUser(steamID, message);
               } else {
-                  return message.reply('specified Steam URL is invalid.');
+                  return message.reply('specified Steam URL is invalid.').then(msg => {
+                      msg.delete({timeout: 5000});
+                  });
               }
           });
         } else {
@@ -40,7 +43,13 @@ function validURL(str) {
 
 async function get64ID(url) {
     let vanityUrl = url.split('/');
-    vanityUrl = vanityUrl[vanityUrl.indexOf('id')+1];
+    if (vanityUrl.indexOf('id') !== -1) {
+        vanityUrl = vanityUrl[vanityUrl.indexOf('id') + 1];
+    }
+    if (vanityUrl.indexOf('profiles') !== -1) {
+        const id = vanityUrl[vanityUrl.indexOf('profiles') + 1];
+        return {response: {steamid: id}};
+    }
     try {
         const response = await got(`http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${config.steamAPIkey}&vanityurl=${vanityUrl}`);
         return JSON.parse(response.body);
@@ -50,7 +59,7 @@ async function get64ID(url) {
 }
 
 function addUser(steamID, message) {
-    fs.readFile('whitelist.txt', 'utf-8', (err, whitelist) => {
+    fs.readFile(config.whitelist, 'utf-8', (err, whitelist) => {
         if (err) {
             return console.error(err);
         }
@@ -61,20 +70,27 @@ function addUser(steamID, message) {
             }
 
             if(!steamUser) {
-                return message.reply('specified SteamID is invalid.')
+                return message.reply('specified SteamID is invalid.').then(msg => {
+                    msg.delete({timeout: 5000});
+                });
             }
 
             if(whitelist.indexOf(steamID) > -1) {
-                return message.reply(`that user is already present in the whitelist.`)
+                return message.reply(`that user is already present in the whitelist.`).then(msg => {
+                    msg.delete({timeout: 5000});
+                });
             }
 
-            const newUser = `\nAdmin=${steamID}:Whitelist // ${steamUser.personaname}`;
+            const newUser = `\r\nAdmin=${steamID}:Whitelist // ${steamUser.personaname}`;
 
-            fs.appendFile('whitelist.txt', newUser, (err) => {
+            fs.appendFile(config.whitelist, newUser, (err) => {
                 if (err) {
                     return console.error(err);
                 }
-                return message.reply(`successfully added Steam user ${steamUser.personaname} to the whitelist.`);
+
+                return message.reply(`successfully added Steam user ${steamUser.personaname} to the whitelist.`).then(msg => {
+                    msg.delete({timeout: 5000});
+                });
             });
         });
     });

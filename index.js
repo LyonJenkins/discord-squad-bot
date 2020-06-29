@@ -35,12 +35,16 @@ client.on('message', message  => {
             return message.channel.send(reply);
         }
 
-        if(!message.member.roles.cache.find(x => x.name === 'Admin') && command.permissions.indexOf('Admin') > -1) {
-            return message.reply('you are not authorized to use that command.');
-        }
+        // if(!message.member.roles.cache.find(x => x.name === 'Admin') && command.permissions.indexOf('Admin') > -1) {
+        //     return message.reply('you are not authorized to use that command.');
+        // }
 
         try {
-            command.execute(message, args);
+            if(command.client) {
+                command.execute(message, args, client);
+            } else {
+                command.execute(message, args);
+            }
         } catch (error) {
             console.error(error);
             message.reply('there was an error trying to execute that command!');
