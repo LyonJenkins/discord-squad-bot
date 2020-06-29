@@ -9,7 +9,7 @@ module.exports = {
 	aliases: ['si', 'server'],
 	permissions: ['Admin'],
 	client: true,
-	execute(message, args, client) {
+	execute(message, args) {
 		const defaultServer = config.servers.find(x => x.name === config.defaultServer);
 		Gamedig.query({
 			type: 'squad',
