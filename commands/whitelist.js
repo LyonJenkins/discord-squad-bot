@@ -11,6 +11,7 @@ module.exports = {
     guildOnly: false,
     aliases: ['wl'],
     permissions: [],
+    disabled: false,
     execute(message, args) {
         let steamID = args[0];
         message.delete({timeout: 1000});

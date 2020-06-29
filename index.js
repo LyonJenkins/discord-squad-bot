@@ -21,6 +21,10 @@ client.on('message', message  => {
         const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
         if(!command) return;
 
+        if(command.disabled) {
+            return;
+        }
+
         if (command.guildOnly && message.channel.type !== 'text') {
             return message.reply('that command cannot be executed inside direct messages.');
         }
@@ -34,6 +38,7 @@ client.on('message', message  => {
 
             return message.channel.send(reply);
         }
+
 
         // if(!message.member.roles.cache.find(x => x.name === 'Admin') && command.permissions.indexOf('Admin') > -1) {
         //     return message.reply('you are not authorized to use that command.');

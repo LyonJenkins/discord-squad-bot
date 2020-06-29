@@ -8,6 +8,7 @@ module.exports = {
     guildOnly: true,
     aliases: ['lp'],
     permissions: ['Admin'],
+    disabled: true,
     execute(message, args) {
         const serverName = args.join(" ");
         rcon.listPlayers(serverName).then(response => {

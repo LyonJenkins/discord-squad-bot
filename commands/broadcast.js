@@ -9,6 +9,7 @@ module.exports = {
     guildOnly: true,
     aliases: ['b'],
     permissions: ['Admin'],
+    disabled: true,
     execute(message, args) {
         if (config.servers.find(x => x.name === args[0].toLowerCase())) {
             const server = args[0];

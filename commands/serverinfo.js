@@ -8,7 +8,7 @@ module.exports = {
 	guildOnly: true,
 	aliases: ['si', 'server'],
 	permissions: ['Admin'],
-	client: true,
+	disabled: false,
 	execute(message, args) {
 		const defaultServer = config.servers.find(x => x.name === config.defaultServer);
 		Gamedig.query({
