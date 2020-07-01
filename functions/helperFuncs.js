@@ -1,6 +1,16 @@
 const Discord = require('discord.js');
 const Gamedig = require('gamedig');
-const config = require('../config.json');
+import { defaultServer, servers } from '../config';
+
+export async function queryServer() {
+	const server = servers.find(x => x.name === defaultServer);
+	return Gamedig.query({
+		type: 'squad',
+		host: server.ip,
+		port: parseInt(server.queryPort),
+		maxAttempts: 5,
+	})
+}
 
 export function newServerInfoEmbed(state) {
 	let count = 0;
@@ -26,18 +36,11 @@ export function checkForRefreshReaction(message, reaction, user) {
 	if(message.embeds[0] && (message.embeds[0].footer.text === 'Server Status powered by Blueberries')) {
 		reaction.remove();
 		message.react('🔄');
-		const defaultServer = config.servers.find(x => x.name === config.defaultServer);
-		Gamedig.query({
-			type: 'squad',
-			host: defaultServer.ip,
-			port: parseInt(defaultServer.queryPort),
-			maxAttempts: 5,
-		}).then((state) => {
-			const serverEmbed = newServerInfoEmbed(state);
-			message.edit(serverEmbed);
-		}).catch((error) => {
-			console.log(error);
-			console.log("Server is offline");
+
+		queryServer().then(response => {
+			message.edit(newServerInfoEmbed(response));
+		}).catch(error => {
+			if(error) console.log(error);
 		});
 	}
 
