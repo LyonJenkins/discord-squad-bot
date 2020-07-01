@@ -1,7 +1,7 @@
 const fs = require('fs');
 const SteamAPI = require('web-api-steam');
-const config = require('../config.json');
 const got = require('got');
+import { steamAPIkey, whitelist } from '../config';
 
 export const name = 'whitelist',
     description = 'Adds the specified Steam 64 ID or the Steam 64 ID from the profile specified to the whitelist.',
@@ -51,7 +51,7 @@ async function get64ID(url) {
         return {response: {steamid: id}};
     }
     try {
-        const response = await got(`http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${config.steamAPIkey}&vanityurl=${vanityUrl}`);
+        const response = await got(`http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${steamAPIkey}&vanityurl=${vanityUrl}`);
         return JSON.parse(response.body);
     } catch (error) {
         console.log(error.response.body);
@@ -59,12 +59,12 @@ async function get64ID(url) {
 }
 
 function addUser(steamID, message) {
-    fs.readFile(config.whitelist, 'utf-8', (err, whitelist) => {
+    fs.readFile(whitelist, 'utf-8', (err, whitelist) => {
         if (err) {
             return console.error(err);
         }
 
-        SteamAPI.getPlayerInfo(steamID, config.steamAPIkey, (err, steamUser) => {
+        SteamAPI.getPlayerInfo(steamID, steamAPIkey, (err, steamUser) => {
             if(err) {
                 return err;
             }
@@ -83,7 +83,7 @@ function addUser(steamID, message) {
 
             const newUser = `\r\nAdmin=${steamID}:Whitelist // ${steamUser.personaname}`;
 
-            fs.appendFile(config.whitelist, newUser, (err) => {
+            fs.appendFile(whitelist, newUser, (err) => {
                 if (err) {
                     return console.error(err);
                 }
