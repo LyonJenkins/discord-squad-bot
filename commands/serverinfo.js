@@ -1,6 +1,6 @@
 const Gamedig = require('gamedig');
-const Discord = require('discord.js');
 const config = require('../config.json');
+import { newServerInfoEmbed} from '../functions/helperFuncs';
 module.exports = {
 	name: 'serverinfo',
 	description: 'Returns info on the public server',
@@ -17,19 +17,7 @@ module.exports = {
 			port: parseInt(defaultServer.queryPort),
 			maxAttempts: 5,
 		}).then((state) => {
-			let count = 0;
-			for(const player of state.players) {
-				if(Object.keys(player).length !== 0) count++;
-			}
-			const serverEmbed = new Discord.MessageEmbed()
-				.setColor('#0099ff')
-				.setTitle(state.name)
-				.addFields(
-					{ name: 'Players', value: `${count} / ${state.maxplayers}`, inline: true },
-					{ name: 'Current Layer', value: state.map, inline: true },
-				)
-				.setTimestamp()
-				.setFooter('Server Status powered by Blueberries');
+			const serverEmbed = newServerInfoEmbed(state);
 			message.channel.send(serverEmbed).then(msg => {
 				msg.react('🔄');
 			});

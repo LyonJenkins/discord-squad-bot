@@ -8,7 +8,7 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 const config = require('./config.json');
-const Gamedig = require('gamedig');
+import { checkForRefreshReaction } from './functions/helperFuncs';
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -39,11 +39,6 @@ client.on('message', message  => {
             return message.channel.send(reply);
         }
 
-
-        // if(!message.member.roles.cache.find(x => x.name === 'Admin') && command.permissions.indexOf('Admin') > -1) {
-        //     return message.reply('you are not authorized to use that command.');
-        // }
-
         try {
             command.execute(message, args);
         } catch (error) {
@@ -54,51 +49,18 @@ client.on('message', message  => {
 });
 
 client.on('messageReactionAdd', async (reaction, user) => {
-    // When we receive a reaction we check if the reaction is partial or not
     if (reaction.partial) {
-        // If the message this reaction belongs to was removed the fetching might result in an API error, which we need to handle
         try {
             await reaction.fetch();
         } catch (error) {
             console.log('Something went wrong when fetching the message: ', error);
-            // Return as `reaction.message.author` may be undefined/null
             return;
         }
     }
-    // Now the message has been cached and is fully available
+
     const message = reaction.message;
-    if(message.author.id === user.id) {
-        return;
-    }
-    if(message.embeds[0] && (message.embeds[0].footer.text === 'Server Status powered by Blueberries')) {
-        reaction.remove();
-        message.react('🔄');
-        const defaultServer = config.servers.find(x => x.name === config.defaultServer);
-        Gamedig.query({
-            type: 'squad',
-            host: defaultServer.ip,
-            port: parseInt(defaultServer.queryPort),
-            maxAttempts: 5,
-        }).then((state) => {
-            let count = 0;
-            for(const player of state.players) {
-                if(Object.keys(player).length !== 0) count++;
-            }
-            const serverEmbed = new Discord.MessageEmbed()
-                .setColor('#0099ff')
-                .setTitle(state.name)
-                .addFields(
-                    { name: 'Players', value: `${count} / ${state.maxplayers}`, inline: true },
-                    { name: 'Current Layer', value: state.map, inline: true },
-                )
-                .setTimestamp()
-                .setFooter('Server Status powered by Blueberries');
-            message.edit(serverEmbed);
-        }).catch((error) => {
-            console.log(error);
-            console.log("Server is offline");
-        });
-    }
+    checkForRefreshReaction(message, reaction, user);
+
 });
 
 client.login(config.BOT_TOKEN);
