@@ -7,7 +7,8 @@ for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
 }
-const config = require('./config.json');
+
+import { BOT_TOKEN, prefix } from './config';
 import { checkForRefreshReaction } from './functions/helperFuncs';
 
 client.on('ready', () => {
@@ -15,9 +16,9 @@ client.on('ready', () => {
 });
 
 client.on('message', message  => {
-    const args = message.content.slice(config.prefix.length).split(' ');
+    const args = message.content.slice(prefix.length).split(' ');
     const commandName = args.shift().toLowerCase();
-    if (message.content.startsWith(config.prefix)) {
+    if (message.content.startsWith(prefix)) {
         const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
         if(!command) return;
 
@@ -33,7 +34,7 @@ client.on('message', message  => {
             let reply = `You did not provide the proper command arguments, ${message.author}.`;
 
             if(command.usage) {
-                reply += `\nThe proper usage would be: \`${config.prefix}${command.name} ${command.usage}\``;
+                reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
             }
 
             return message.channel.send(reply);
@@ -63,4 +64,4 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
 });
 
-client.login(config.BOT_TOKEN);
+client.login(BOT_TOKEN);
