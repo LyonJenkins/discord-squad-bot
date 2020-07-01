@@ -3,34 +3,33 @@ const SteamAPI = require('web-api-steam');
 const config = require('../config.json');
 const got = require('got');
 
-module.exports = {
-    name: 'whitelist',
-    description: 'Adds the specified Steam 64 ID or the Steam 64 ID from the profile specified to the whitelist.',
-    usage: '<steam64id or steam profile url>',
-    args: true,
-    guildOnly: false,
-    aliases: ['wl'],
-    permissions: [],
-    disabled: false,
-    execute(message, args) {
-        let steamID = args[0];
-        message.delete({timeout: 1000});
-        if(validURL(steamID)) {
-          get64ID(args[0]).then(response => {
-              if(response.response.steamid) {
-                  steamID = response.response.steamid;
-                  addUser(steamID, message);
-              } else {
-                  return message.reply('specified Steam URL is invalid.').then(msg => {
-                      msg.delete({timeout: 5000});
-                  });
-              }
-          });
-        } else {
-            addUser(steamID, message);
-        }
-    },
-};
+export const name = 'whitelist',
+    description = 'Adds the specified Steam 64 ID or the Steam 64 ID from the profile specified to the whitelist.',
+    usage = '<steam64id or steam profile url>',
+    args = true,
+    guildOnly = false,
+    aliases = ['wl'],
+    permissions = [],
+    disabled = false;
+
+export function execute(message, args) {
+    let steamID = args[0];
+    message.delete({timeout: 1000});
+    if(validURL(steamID)) {
+        get64ID(args[0]).then(response => {
+            if(response.response.steamid) {
+                steamID = response.response.steamid;
+                addUser(steamID, message);
+            } else {
+                return message.reply('specified Steam URL is invalid.').then(msg => {
+                    msg.delete({timeout: 5000});
+                });
+            }
+        });
+    } else {
+        addUser(steamID, message);
+    }
+}
 
 function validURL(str) {
     const pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
