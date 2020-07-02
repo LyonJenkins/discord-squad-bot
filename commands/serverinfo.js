@@ -1,19 +1,22 @@
-import { queryServer, newServerInfoEmbed } from '../functions/helperFuncs';
+import { Server } from '../events';
 
-export const name = 'serverinfo',
-	description = 'Returns info on the public server',
-	args = false,
-	guildOnly = true,
-	aliases = ['si', 'server'],
-	permissions = ['Admin'],
-	disabled = false;
+export default class serverInfo {
+	constructor() {
+		this.name = 'server';
+		this.description = 'Returns info on the public server';
+		this.args = false;
+		this.guildOnly = true;
+		this.aliases = ['si', 'server'];
+		this.disabled = false;
+	}
 
-export function execute(message, args) {
-	queryServer().then(response => {
-		message.channel.send(newServerInfoEmbed(response)).then(msg => {
-			msg.react('🔄');
+	execute(message, args) {
+		const server = new Server('public');
+		server.generateEmbed().then(embed => {
+			message.channel.send(embed).then(msg => {
+				msg.react('🔄');
+			});
 		});
-	}).catch(error => {
-		if(error) console.log(error);
-	});
+	}
+
 }

@@ -1,33 +1,36 @@
 const fs = require('fs');
 const SteamAPI = require('web-api-steam');
 const got = require('got');
-import { steamAPIkey, whitelist } from '../config';
+import { steamAPIkey, whitelistPath } from '../config';
 
-export const name = 'whitelist',
-    description = 'Adds the specified Steam 64 ID or the Steam 64 ID from the profile specified to the whitelist.',
-    usage = '<steam64id or steam profile url>',
-    args = true,
-    guildOnly = false,
-    aliases = ['wl'],
-    permissions = [],
-    disabled = false;
+export default class whitelist {
+    constructor() {
+        this.name = 'whitelist';
+        this.description = 'Adds the specified Steam 64 ID or the Steam 64 ID from the profile specified to the whitelist.';
+        this.usage = '<steam64id or steam profile url>';
+        this.args = true;
+        this.guildOnly = false;
+        this.aliases = ['wl'];
+        this.disabled = false;
+    }
 
-export function execute(message, args) {
-    let steamID = args[0];
-    message.delete({timeout: 1000});
-    if(validURL(steamID)) {
-        get64ID(args[0]).then(response => {
-            if(response.response.steamid) {
-                steamID = response.response.steamid;
-                addUser(steamID, message);
-            } else {
-                return message.reply('specified Steam URL is invalid.').then(msg => {
-                    msg.delete({timeout: 5000});
-                });
-            }
-        });
-    } else {
-        addUser(steamID, message);
+    execute(message, args) {
+        let steamID = args[0];
+        message.delete({timeout: 1000});
+        if(validURL(steamID)) {
+            get64ID(args[0]).then(response => {
+                if(response.response.steamid) {
+                    steamID = response.response.steamid;
+                    addUser(steamID, message);
+                } else {
+                    return message.reply('specified Steam URL is invalid.').then(msg => {
+                        msg.delete({timeout: 5000});
+                    });
+                }
+            });
+        } else {
+            addUser(steamID, message);
+        }
     }
 }
 
@@ -59,7 +62,7 @@ async function get64ID(url) {
 }
 
 function addUser(steamID, message) {
-    fs.readFile(whitelist, 'utf-8', (err, whitelist) => {
+    fs.readFile(whitelistPath, 'utf-8', (err, whitelist) => {
         if (err) {
             return console.error(err);
         }
@@ -83,7 +86,7 @@ function addUser(steamID, message) {
 
             const newUser = `\r\nAdmin=${steamID}:Whitelist // ${steamUser.personaname}`;
 
-            fs.appendFile(whitelist, newUser, (err) => {
+            fs.appendFile(whitelistPath, newUser, (err) => {
                 if (err) {
                     return console.error(err);
                 }
