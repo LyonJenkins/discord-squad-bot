@@ -7,13 +7,15 @@ export function checkForRefreshReaction(message, reaction, user) {
 		return;
 	}
 	if(message.embeds[0]) {
-		if(message.embeds[0].footer.text === 'Server Status powered by Blueberries') {
-			reaction.remove();
-			message.react('🔄');
-			const server = new Server('public');
-			server.generateEmbed().then(embed => {
-				message.edit(embed);
-			});
+		if(message.embeds[0].footer) {
+			if(message.embeds[0].footer.text === 'Server Status powered by Blueberries') {
+				reaction.remove();
+				message.react('🔄');
+				const server = new Server('public');
+				server.generateEmbed().then(embed => {
+					message.edit(embed);
+				});
+			}
 		}
 	}
 }
