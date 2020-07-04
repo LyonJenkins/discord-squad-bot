@@ -3,6 +3,7 @@ const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION',
 client.commands = new Discord.Collection();
 import * as commands from './commands';
 import { serverStatus } from './functions/serverStatus';
+import { signupReactionAdd, signupReactionRemove } from './commands/createSignup';
 
 Object.values(commands).forEach((command) => {
    client.commands.set(command.name.toLowerCase(), command);
@@ -73,7 +74,21 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
     const message = reaction.message;
     checkForRefreshReaction(message, reaction, user);
+    signupReactionAdd(message, reaction, user);
+});
 
+client.on('messageReactionRemove', async (reaction, user) => {
+    if (reaction.partial) {
+        try {
+            await reaction.fetch();
+        } catch (error) {
+            console.log('Something went wrong when fetching the message: ', error);
+            return;
+        }
+    }
+
+    const message = reaction.message;
+    signupReactionRemove(message, reaction, user);
 });
 
 client.login(BOT_TOKEN);
