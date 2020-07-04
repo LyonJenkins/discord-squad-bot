@@ -1,7 +1,9 @@
+import { properArgs } from '../functions/helperFuncs';
+
 const fs = require('fs');
 const Discord = require('discord.js');
 import { EventEmitter } from 'events';
-import { signupsChannel, adminRoleID } from '../config';
+import { signupsChannel } from '../config';
 
 export default class createSignup {
 	constructor() {
@@ -17,13 +19,12 @@ export default class createSignup {
 	}
 
 	execute(message, args) {
+		message.delete({timeout: 5000});
 		args = args.join(' ');
 		args = args.split('] [');
-		if(args.length !== 2) return;
+		if(args.length !== 2) return message.reply(properArgs(createSignup));
 		const eventName = args[0].replace('[', '');
 		const date = args[1].replace(']', '');
-		console.log(eventName);
-		console.log(date);
 		message.channel.send('@everyone').then(msg => {
 			const signup = new Discord.MessageEmbed()
 				.setColor('#0099ff')
