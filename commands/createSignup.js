@@ -1,26 +1,27 @@
 const fs = require('fs');
 const Discord = require('discord.js');
 import { EventEmitter } from 'events';
-import { signupsChannel } from '../config';
+import { signupsChannel, adminRoleID } from '../config';
 
 export default class createSignup {
 	constructor() {
 		this.name = 'createsignup';
 		this.description = 'Creates an event signup';
-		this.usage = '<name> <date>';
+		this.usage = '[name] [date]';
 		this.args = true;
 		this.guildOnly = true;
 		this.aliases = [''];
 		this.disabled = false;
 		this.client = true;
+		this.adminOnly = true;
 	}
 
 	execute(message, args) {
 		args = args.join(' ');
 		args = args.split('] [');
 		if(args.length !== 2) return;
-		const eventName = args[0].substring(1, args[0].length);
-		const date = args[1].substring(0, args[0].length - 3);
+		const eventName = args[0].replace('[', '');
+		const date = args[1].replace(']', '');
 		console.log(eventName);
 		console.log(date);
 		message.channel.send('@everyone').then(msg => {
@@ -152,7 +153,9 @@ function updateSignupsMessage(signup, message) {
 								{ name: 'Going', value: `${accepted}` },
 								{ name: 'Not Going', value: `${declined}` },
 								{ name: 'Maybe', value: `${maybe}` },
-							);
+							)
+							.setFooter(signup.messageID)
+							.setTimestamp();
 						msg.edit(newEmbed);
 					});
 				})
