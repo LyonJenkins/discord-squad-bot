@@ -15,19 +15,20 @@ export default class Server extends EventEmitter {
 	}
 
 	main() {
-		setInterval(() => {
-			this.queryServer().then(state => {
-				const count = getTruePlayerCount(state.players);
-				if(this.playerCount !== count || this.map !== state.map) {
-					this.playerCount = count;
-					this.map = state.map;
-					this.emit('update');
-				}
-			}).catch(error => {
-				console.log(error);
-			});
-		}, 30000);
-		this.setServerData();
+		this.setServerData().then(() => {
+			setInterval(() => {
+				this.queryServer().then(state => {
+					const count = getTruePlayerCount(state.players);
+					if(this.playerCount !== count || this.map !== state.map) {
+						this.playerCount = count;
+						this.map = state.map;
+						this.emit('update');
+					}
+				}).catch(error => {
+					console.log(error);
+				});
+			}, 30000);
+		});
 	}
 
 	async generateEmbed() {
