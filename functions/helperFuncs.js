@@ -1,4 +1,5 @@
 import { Server } from '../events';
+import { prefix } from '../config';
 
 // Function to check if refresh reaction has been added to the server info embed
 export function checkForRefreshReaction(message, reaction, user) {
@@ -23,4 +24,14 @@ export function getTruePlayerCount(players) {
 		}
 	}
 	return count;
+}
+
+export function properArgs(command) {
+	const commandClass = new command();
+	let reply = `you did not provide the proper command arguments.`;
+
+	if(commandClass.usage) {
+		reply += `\nThe proper usage would be: \`${prefix}${commandClass.name} ${commandClass.usage}\``;
+	}
+	return reply;
 }

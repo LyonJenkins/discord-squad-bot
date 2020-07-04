@@ -11,7 +11,7 @@ Object.values(commands).forEach((command) => {
 
 
 import { adminRoleID, BOT_TOKEN, prefix } from './config';
-import { checkForRefreshReaction } from './functions/helperFuncs';
+import { checkForRefreshReaction, properArgs } from './functions/helperFuncs';
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -33,7 +33,12 @@ client.on('message', message  => {
             });
         }
 
-        const commandClass = new command();
+        let commandClass;
+        try {
+            commandClass = new command()
+        } catch (err) {
+            return;
+        }
 
         if(commandClass.disabled) {
             return;
@@ -50,13 +55,7 @@ client.on('message', message  => {
         }
 
         if(commandClass.args && !args.length) {
-            let reply = `You did not provide the proper command arguments, ${message.author}.`;
-
-            if(commandClass.usage) {
-                reply += `\nThe proper usage would be: \`${prefix}${commandClass.name} ${commandClass.usage}\``;
-            }
-
-            return message.channel.send(reply);
+            return message.reply(properArgs(command));
         }
 
         try {
