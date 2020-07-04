@@ -1,7 +1,7 @@
 const fs = require('fs');
 const Discord = require('discord.js');
 import { EventEmitter } from 'events';
-import { seedingChannelID, serverStatusMessageID, signupsChannel } from '../config';
+import { signupsChannel } from '../config';
 
 export default class createSignup {
 	constructor() {
