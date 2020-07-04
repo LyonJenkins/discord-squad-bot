@@ -10,7 +10,7 @@ Object.values(commands).forEach((command) => {
 });
 
 
-import { BOT_TOKEN, prefix } from './config';
+import { adminRoleID, BOT_TOKEN, prefix } from './config';
 import { checkForRefreshReaction } from './functions/helperFuncs';
 
 client.on('ready', () => {
@@ -37,6 +37,12 @@ client.on('message', message  => {
 
         if(commandClass.disabled) {
             return;
+        }
+
+        if(commandClass.adminOnly) {
+            if(!message.member.roles.cache.find(role => role.id === adminRoleID)) {
+                return message.reply('you are not authorized to use that command.');
+            }
         }
 
         if (commandClass.guildOnly && message.channel.type !== 'text') {
