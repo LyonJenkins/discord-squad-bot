@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
-import { getTruePlayerCount } from '../functions/helperFuncs';
 import { servers } from '../config';
+
 const Discord = require('discord.js');
 const Gamedig = require('gamedig');
 
@@ -12,20 +12,21 @@ export default class Server extends EventEmitter {
 		this.map = '';
 		this.maxPlayers = 0;
 		this.name = '';
+		this.publicSlots = 0;
+		this.reservedSlots = 0;
+		this.publicQueue = 0;
+		this.reservedQueue = 0;
 	}
 
 	main() {
 		this.setServerData().then(() => {
 			setInterval(() => {
-				this.queryServer().then(state => {
-					const count = getTruePlayerCount(state.players);
-					if(this.playerCount !== count || this.map !== state.map) {
-						this.playerCount = count;
-						this.map = state.map;
-						this.emit('update');
+				this.parseServerData().then(data => {
+					if(data.playerCount !== this.playerCount || data.map !== this.map || data.publicQueue !== this.publicQueue || data.reservedQueue !== this.reservedQueue || data.publicSlots !== this.publicSlots || data.reservedSlots !== this.reservedSlots) {
+						this.setServerData().then(() => {
+							this.emit('update');
+						});
 					}
-				}).catch(error => {
-					console.log(error);
 				});
 			}, 30000);
 		});
@@ -37,7 +38,7 @@ export default class Server extends EventEmitter {
 			.setColor('#0099ff')
 			.setTitle(this.name)
 			.addFields(
-				{ name: 'Players', value: `${this.playerCount} / ${this.maxPlayers}`, inline: true },
+				{ name: 'Players', value: this.generatePlayersString(), inline: true },
 				{ name: 'Current Layer', value: this.map, inline: true },
 			)
 			.setTimestamp()
@@ -45,16 +46,47 @@ export default class Server extends EventEmitter {
 	}
 
 	async setServerData() {
-		await this.queryServer().then(state => {
-			this.playerCount = getTruePlayerCount(state.players);
-			this.map = state.map;
-			this.maxPlayers = state.maxplayers;
-			this.name = state.name;
-		}).catch(error => {
-			console.log(error);
-		});
+		const data = await this.parseServerData();
+		this.playerCount = data.playerCount;
+		this.map = data.map;
+		this.maxPlayers = data.maxplayers;
+		this.publicSlots = data.publicSlots;
+		this.reservedSlots = data.reservedSlots;
+		this.publicQueue = data.publicQueue;
+		this.reservedQueue = data.reservedQueue;
+		this.name = data.name;
 	}
 
+	async parseServerData() {
+		const state = await this.queryServer();
+		return {
+			playerCount: parseInt(state.raw.rules.PlayerCount_i),
+			map: state.map,
+			maxPlayers: state.maxplayers,
+			publicSlots: parseInt(state.raw.rules.NUMPUBCONN),
+			reservedSlots: parseInt(state.raw.rules.NUMPRIVCONN),
+			publicQueue: parseInt(state.raw.rules.PublicQueue_i),
+			reservedQueue: parseInt(state.raw.rules.ReservedQueue_i),
+			name: state.name,
+		};
+	}
+
+	generatePlayersString(minimize) {
+		let string = `${this.playerCount}`;
+		if(this.publicQueue > 0) {
+			string+=`+${this.publicQueue + this.reservedQueue}`;
+		}
+		if(minimize) {
+			string+=`/`
+		} else {
+			string+=` / `
+		}
+		string+=`${this.publicSlots}`;
+		if(this.reservedSlots > 0) {
+			string+=`+${this.reservedSlots}`;
+		}
+		return string;
+	}
 
 	async queryServer() {
 		return Gamedig.query({

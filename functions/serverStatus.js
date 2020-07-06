@@ -11,7 +11,7 @@ export function serverStatus(client) {
 }
 
 function setActivity(server, client) {
-	client.user.setActivity(`(${server.playerCount}/${server.maxPlayers}) ${server.map}`);
+	client.user.setActivity(`(${server.generatePlayersString(true)}) ${server.map}`);
 }
 
 function setMessage(server, client) {
