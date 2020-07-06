@@ -62,7 +62,7 @@ class signupReactionChange extends EventEmitter {
 			}
 			const signUpJSON = JSON.parse(signups);
 			if (this.message.embeds[0]) {
-				if(this.message.embeds[0].footer === null) return;
+				if(this.message.embeds[0].footer == null) return;
 				if(typeof this.message.embeds[0].footer.text === 'string') {
 					const signUp = signUpJSON.signUps.find(x => x.messageID === this.message.embeds[0].footer.text);
 					if(signUp) {
@@ -101,7 +101,7 @@ class signupReactionChange extends EventEmitter {
 			}
 			const signUpJSON = JSON.parse(signups);
 			if (this.message.embeds[0]) {
-				if(this.message.embeds[0].footer === null) return;
+				if(this.message.embeds[0].footer == null) return;
 				if(typeof this.message.embeds[0].footer.text === 'string') {
 					const signUp = signUpJSON.signUps.find(x => x.messageID === this.message.embeds[0].footer.text);
 					if(signUp) {
