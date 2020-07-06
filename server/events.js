@@ -1,5 +1,5 @@
 import { LogParser } from '../log-parser';
-import { serverLogChannelID } from '../config';
+import { seedingChannelID, serverLogChannelID, serverStatusMessageID } from '../config';
 const Discord = require('discord.js');
 
 export default class Events {
@@ -11,7 +11,7 @@ export default class Events {
 		const logParser = new LogParser(this.server);
 		logParser.main();
 		const logChannel = this.server.client.channels.cache.find(channel => channel.id === serverLogChannelID);
-		logParser.on('TICK_RATE', data => {
+		this.server.on('TICK_RATE', data => {
 			if(data.tickRate !== this.server.tickRate) {
 				this.server.tickRate = data.tickRate;
 				const embed = new Discord.MessageEmbed()
@@ -25,7 +25,7 @@ export default class Events {
 				logChannel.send(embed);
 			}
 		});
-		logParser.on('PLAYER_POSSESS', data => {
+		this.server.on('PLAYER_POSSESS', data => {
 			if(data.classname === 'CameraMan') {
 				const embed = new Discord.MessageEmbed()
 					.setColor('#0099ff')
@@ -38,5 +38,28 @@ export default class Events {
 				logChannel.send(embed);
 			}
 		});
+		this.server.on('SERVER_UPDATE', () => {
+			setActivity(this.server);
+			setMessage(this.server);
+		});
 	}
 }
+
+function setActivity(server) {
+	server.client.user.setActivity(`(${server.generatePlayersString(true)}) ${server.map}`);
+}
+
+function setMessage(server) {
+	const seedingChannel = server.client.channels.cache.find(channel => channel.id === seedingChannelID);
+	if(seedingChannel) {
+		seedingChannel.messages.fetch(serverStatusMessageID).then(msg => {
+			const serverStatusMessage = msg;
+			if(serverStatusMessage) {
+				server.generateEmbed().then(embed => {
+					serverStatusMessage.edit(embed);
+				});
+			}
+		});
+	}
+}
+

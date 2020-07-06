@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events';
 import { servers } from '../config';
 import { Events } from '.';
-import { serverStatus } from '../functions/serverStatus';
 const Discord = require('discord.js');
 const Gamedig = require('gamedig');
 
@@ -24,7 +23,6 @@ export default class Server extends EventEmitter {
 	main() {
 		const events = new Events(this);
 		events.main();
-		serverStatus(this);
 		this.setServerData().then(() => {
 			setInterval(() => {
 				this.parseServerData().then(data => {
