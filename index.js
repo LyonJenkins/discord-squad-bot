@@ -10,10 +10,8 @@ Object.values(commands).forEach((command) => {
    client.commands.set(command.name.toLowerCase(), command);
 });
 
-
 import { adminRoleID, BOT_TOKEN, prefix } from './config';
 import { checkForRefreshReaction, properArgs } from './functions/helperFuncs';
-
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
