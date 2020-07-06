@@ -12,10 +12,13 @@ Object.values(commands).forEach((command) => {
 
 import { adminRoleID, BOT_TOKEN, prefix } from './config';
 import { checkForRefreshReaction, properArgs } from './functions/helperFuncs';
+import { LogParserListener } from './events/'
+
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
     serverStatus(client);
+    LogParserListener(client);
 });
 
 client.on('message', message  => {
