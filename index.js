@@ -3,7 +3,7 @@ const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION',
 client.commands = new Discord.Collection();
 import * as commands from './commands';
 import { signupReactionAdd, signupReactionRemove } from './commands/createSignup';
-import { Server } from './events';
+import { Server } from './server';
 let server;
 
 Object.values(commands).forEach((command) => {
