@@ -1,5 +1,5 @@
 import Server from './server';
-import LogParserListener from './LogParserListener';
+import LogParserListener from './logParserListener';
 
 export {
 	Server,
