@@ -9,6 +9,7 @@ export default class newLine {
 		this.guildOnly = false;
 		this.aliases = [];
 		this.disabled = false;
+		this.adminOnly = true;
 	}
 
 	execute(message, args) {
