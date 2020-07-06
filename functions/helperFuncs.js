@@ -2,7 +2,7 @@ import { Server } from '../events';
 import { prefix } from '../config';
 
 // Function to check if refresh reaction has been added to the server info embed
-export function checkForRefreshReaction(message, reaction, user) {
+export function checkForRefreshReaction(message, reaction, user, server) {
 	if(message.author.id === user.id) {
 		return;
 	}
@@ -11,23 +11,12 @@ export function checkForRefreshReaction(message, reaction, user) {
 			if(message.embeds[0].footer.text === 'Server Status powered by Blueberries') {
 				reaction.remove();
 				message.react('🔄');
-				const server = new Server('public');
 				server.generateEmbed().then(embed => {
 					message.edit(embed);
 				});
 			}
 		}
 	}
-}
-
-export function getTruePlayerCount(players) {
-	let count = 0;
-	for(const player of players) {
-		if(Object.keys(player).length !== 0) {
-			count++;
-		}
-	}
-	return count;
 }
 
 export function properArgs(command) {
