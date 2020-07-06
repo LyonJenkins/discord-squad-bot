@@ -62,7 +62,9 @@ export default class Server extends EventEmitter {
 	}
 
 	async parseServerData() {
-		const state = await this.queryServer();
+		const state = await this.queryServer().catch(error => {
+			console.log(error);
+		});
 		return {
 			playerCount: parseInt(state.raw.rules.PlayerCount_i),
 			map: state.map,
