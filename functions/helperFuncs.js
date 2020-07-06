@@ -1,4 +1,3 @@
-import { Server } from '../events';
 import { prefix } from '../config';
 
 // Function to check if refresh reaction has been added to the server info embed
