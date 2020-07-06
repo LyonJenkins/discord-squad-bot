@@ -1,5 +1,3 @@
-import { Server } from '../events';
-
 export default class serverInfo {
 	constructor() {
 		this.name = 'server';
@@ -10,8 +8,7 @@ export default class serverInfo {
 		this.disabled = false;
 	}
 
-	execute(message, args) {
-		const server = new Server('public');
+	execute(message, args, server) {
 		server.generateEmbed().then(embed => {
 			message.channel.send(embed).then(msg => {
 				msg.react('🔄');

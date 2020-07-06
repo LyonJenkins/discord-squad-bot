@@ -2,8 +2,9 @@ const Discord = require('discord.js');
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'GUILD_MEMBER'] });
 client.commands = new Discord.Collection();
 import * as commands from './commands';
-import { serverStatus } from './functions/serverStatus';
 import { signupReactionAdd, signupReactionRemove } from './commands/createSignup';
+import { Server } from './events';
+let server;
 
 Object.values(commands).forEach((command) => {
    client.commands.set(command.name.toLowerCase(), command);
@@ -12,13 +13,12 @@ Object.values(commands).forEach((command) => {
 
 import { adminRoleID, BOT_TOKEN, prefix } from './config';
 import { checkForRefreshReaction, properArgs } from './functions/helperFuncs';
-import { LogParserListener } from './events/'
 
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
-    serverStatus(client);
-    LogParserListener(client);
+    server = new Server('public', client);
+    server.main();
 });
 
 client.on('message', message  => {
@@ -62,7 +62,7 @@ client.on('message', message  => {
         }
 
         try {
-            commandClass.execute(message, args);
+            commandClass.execute(message, args, server);
         } catch (error) {
             console.error(error);
             message.reply('there was an error trying to execute that command!');
@@ -81,7 +81,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     }
 
     const message = reaction.message;
-    checkForRefreshReaction(message, reaction, user);
+    checkForRefreshReaction(message, reaction, user, server);
     signupReactionAdd(message, reaction, user);
 });
 
