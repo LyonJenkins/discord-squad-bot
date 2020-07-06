@@ -2,13 +2,14 @@ import { LogParser } from '../log-parser';
 import { serverLogChannelID } from '../config';
 const Discord = require('discord.js');
 
-export default class LogParserListener {
+export default class Events {
 	constructor(server) {
 		this.server = server;
 	}
 
 	main() {
-		const logParser = new LogParser();
+		const logParser = new LogParser(this.server);
+		logParser.main();
 		const logChannel = this.server.client.channels.cache.find(channel => channel.id === serverLogChannelID);
 		logParser.on('TICK_RATE', data => {
 			if(data.tickRate !== this.server.tickRate) {
@@ -37,6 +38,5 @@ export default class LogParserListener {
 				logChannel.send(embed);
 			}
 		});
-		logParser.main();
 	}
 }

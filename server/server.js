@@ -1,11 +1,12 @@
 import { EventEmitter } from 'events';
 import { servers } from '../config';
-
+import { Events } from '.';
+import { serverStatus } from '../functions/serverStatus';
 const Discord = require('discord.js');
 const Gamedig = require('gamedig');
 
 export default class Server extends EventEmitter {
-	constructor(serverName) {
+	constructor(serverName, client) {
 		super();
 		this.server = servers.find(x => x.name === serverName);
 		this.playerCount = 0;
@@ -16,15 +17,20 @@ export default class Server extends EventEmitter {
 		this.reservedSlots = 0;
 		this.publicQueue = 0;
 		this.reservedQueue = 0;
+		this.tickRate = 0;
+		this.client = client;
 	}
 
 	main() {
+		const events = new Events(this);
+		events.main();
+		serverStatus(this);
 		this.setServerData().then(() => {
 			setInterval(() => {
 				this.parseServerData().then(data => {
 					if(data.playerCount !== this.playerCount || data.map !== this.map || data.publicQueue !== this.publicQueue || data.reservedQueue !== this.reservedQueue || data.publicSlots !== this.publicSlots || data.reservedSlots !== this.reservedSlots) {
 						this.setServerData().then(() => {
-							this.emit('update');
+							this.emit('SERVER_UPDATE');
 						});
 					}
 				});
