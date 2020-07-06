@@ -5,6 +5,6 @@ export default {
 			time: args[1],
 			tickRate: parseFloat(args[3]),
 		};
-		logParser.emit('TICK_RATE', data);
+		logParser.server.emit('TICK_RATE', data);
 	}
 }

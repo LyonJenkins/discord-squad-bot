@@ -6,6 +6,6 @@ export default {
 			player: args[3],
 			classname: args[4]
 		};
-		logParser.emit('PLAYER_POSSESS', data);
+		logParser.server.emit('PLAYER_POSSESS', data);
 	}
 }

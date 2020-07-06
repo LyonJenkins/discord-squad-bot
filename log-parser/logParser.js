@@ -6,8 +6,9 @@ import { squadGameLogPath } from '../config';
 import async from 'async';
 
 export default class LogParser extends EventEmitter {
-	constructor() {
+	constructor(server) {
 		super();
+		this.server = server;
 		this.queue = async.queue((task, callback) => {
 			handleLine(task.data, this).then(() => {
 				callback();
