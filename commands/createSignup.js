@@ -61,26 +61,28 @@ class signupReactionChange extends EventEmitter {
 				console.log(err);
 			}
 			const signUpJSON = JSON.parse(signups);
-			if (this.message.embeds[0] && this.message.embeds[0].footer.text) {
-				const signUp = signUpJSON.signUps.find(x => x.messageID === this.message.id);
-				if(signUp) {
-					let newsignup = signUp;
+			if (this.message.embeds[0]) {
+				if(typeof this.message.embeds[0].footer.text === 'string') {
+					const signUp = signUpJSON.signUps.find(x => x.messageID === this.message.embeds[0].footer.text);
 					if(signUp) {
-						if(!checkIfSignedUp(signUp, this.user.id)) {
-							if (this.reaction.emoji.name === '⬆') {
-								newsignup.accepted.push(this.user.id);
-								this.emit('update', newsignup, signUpJSON);
-							} else if (this.reaction.emoji.name === '⬇') {
-								newsignup.declined.push(this.user.id);
-								this.emit('update', newsignup, signUpJSON);
-							} else if (this.reaction.emoji.name === '❓') {
-								newsignup.maybe.push(this.user.id);
-								this.emit('update', newsignup, signUpJSON);
+						let newsignup = signUp;
+						if(signUp) {
+							if(!checkIfSignedUp(signUp, this.user.id)) {
+								if (this.reaction.emoji.name === '⬆') {
+									newsignup.accepted.push(this.user.id);
+									this.emit('update', newsignup, signUpJSON);
+								} else if (this.reaction.emoji.name === '⬇') {
+									newsignup.declined.push(this.user.id);
+									this.emit('update', newsignup, signUpJSON);
+								} else if (this.reaction.emoji.name === '❓') {
+									newsignup.maybe.push(this.user.id);
+									this.emit('update', newsignup, signUpJSON);
+								} else {
+									this.reaction.remove();
+								}
 							} else {
-								this.reaction.remove();
+								this.reaction.users.remove(this.user);
 							}
-						} else {
-							this.reaction.users.remove(this.user);
 						}
 					}
 				}
@@ -97,21 +99,23 @@ class signupReactionChange extends EventEmitter {
 				console.log(err);
 			}
 			const signUpJSON = JSON.parse(signups);
-			if (this.message.embeds[0] && this.message.embeds[0].footer.text) {
-				const signUp = signUpJSON.signUps.find(x => x.messageID === this.message.id);
-				if(signUp) {
-					let newsignup = signUp;
+			if (this.message.embeds[0]) {
+				if(typeof this.message.embeds[0].footer.text === 'string') {
+					const signUp = signUpJSON.signUps.find(x => x.messageID === this.message.embeds[0].footer.text);
 					if(signUp) {
-						if(checkIfSignedUp(signUp, this.user.id)) {
-							if (this.reaction.emoji.name === '⬆') {
-								newsignup.accepted.splice(newsignup.accepted.indexOf(this.user.id), 1);
-								this.emit('update', newsignup, signUpJSON);
-							} else if (this.reaction.emoji.name === '⬇') {
-								newsignup.declined.splice(newsignup.declined.indexOf(this.user.id), 1);
-								this.emit('update', newsignup, signUpJSON);
-							} else if (this.reaction.emoji.name === '❓') {
-								newsignup.maybe.splice(newsignup.maybe.indexOf(this.user.id), 1);
-								this.emit('update', newsignup, signUpJSON);
+						let newsignup = signUp;
+						if(signUp) {
+							if(checkIfSignedUp(signUp, this.user.id)) {
+								if (this.reaction.emoji.name === '⬆') {
+									newsignup.accepted.splice(newsignup.accepted.indexOf(this.user.id), 1);
+									this.emit('update', newsignup, signUpJSON);
+								} else if (this.reaction.emoji.name === '⬇') {
+									newsignup.declined.splice(newsignup.declined.indexOf(this.user.id), 1);
+									this.emit('update', newsignup, signUpJSON);
+								} else if (this.reaction.emoji.name === '❓') {
+									newsignup.maybe.splice(newsignup.maybe.indexOf(this.user.id), 1);
+									this.emit('update', newsignup, signUpJSON);
+								}
 							}
 						}
 					}
