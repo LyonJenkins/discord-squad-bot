@@ -1,21 +1,18 @@
-import { Server } from '../events';
 import { seedingChannelID, serverStatusMessageID } from '../config';
 
-export function serverStatus(client) {
-	const server = new Server('public');
+export function serverStatus(server) {
 	server.on('update', () => {
-		setActivity(server, client);
-		setMessage(server, client);
+		setActivity(server);
+		setMessage(server);
 	});
-	server.main();
 }
 
-function setActivity(server, client) {
-	client.user.setActivity(`(${server.generatePlayersString(true)}) ${server.map}`);
+function setActivity(server) {
+	server.client.user.setActivity(`(${server.generatePlayersString(true)}) ${server.map}`);
 }
 
-function setMessage(server, client) {
-	const seedingChannel = client.channels.cache.find(channel => channel.id === seedingChannelID);
+function setMessage(server) {
+	const seedingChannel = server.client.channels.cache.find(channel => channel.id === seedingChannelID);
 	if(seedingChannel) {
 		seedingChannel.messages.fetch(serverStatusMessageID).then(msg => {
 			const serverStatusMessage = msg;
