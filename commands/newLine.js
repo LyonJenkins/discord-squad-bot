@@ -8,7 +8,7 @@ export default class newLine {
 		this.args = false;
 		this.guildOnly = false;
 		this.aliases = [];
-		this.disabled = false;
+		this.disabled = true;
 		this.adminOnly = true;
 	}
 
