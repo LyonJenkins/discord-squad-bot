@@ -3,7 +3,7 @@ export default {
 	parseArgs: (args, logParser) => {
 		const data = {
 			time: args[1],
-			tickRate: parseFloat(args[3]),
+			tickRate: parseInt(args[3]),
 		};
 		logParser.server.emit('TICK_RATE', data);
 	}
