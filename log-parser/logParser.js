@@ -1,13 +1,11 @@
-import { EventEmitter } from 'events';
 import FileTail from './tail';
 import rules from './rules';
 import * as moment from 'moment';
 import { squadGameLogPath } from '../config';
 import async from 'async';
 
-export default class LogParser extends EventEmitter {
+export default class LogParser {
 	constructor(server) {
-		super();
 		this.server = server;
 		this.queue = async.queue((task, callback) => {
 			handleLine(task.data, this).then(() => {
@@ -18,7 +16,7 @@ export default class LogParser extends EventEmitter {
 
 	main() {
 		const fileTail = new FileTail(squadGameLogPath);
-		fileTail.on('new line', data => {
+		fileTail.on('line', data => {
 			this.queue.push({data});
 		});
 		fileTail.main();
