@@ -12,18 +12,23 @@ export default class Events {
 		logParser.main();
 		const logChannel = this.server.client.channels.cache.find(channel => channel.id === serverLogChannelID);
 		this.server.on('TICK_RATE', data => {
-			if(data.tickRate !== this.server.tickRate) {
-				this.server.tickRate = data.tickRate;
-				const embed = new Discord.MessageEmbed()
-					.setColor('#0099ff')
-					.setTitle(`Server Tick Rate Update`)
-					.addFields(
-						{ name: 'Tick Rate', value: `${data.tickRate}` },
-						{ name: 'Action Timestamp', value: `${data.time}` },
-					)
-					.setTimestamp();
-				logChannel.send(embed);
+			this.server.tickRate = data.tickRate;
+			if(data.tickRate > 25) {
+				return;
 			}
+			let embed = new Discord.MessageEmbed()
+				.setTitle(`Server Tick Rate Update`)
+				.addFields(
+					{ name: 'Tick Rate', value: `${data.tickRate}` },
+					{ name: 'Action Timestamp', value: `${data.time}` },
+				)
+				.setTimestamp();
+			if(data.tickRate <= 25 && data.tickRate > 20) {
+				embed.setColor('#FFFF00');
+			} else if(data.tickRate <= 20) {
+				embed.setColor('#ff0000');
+			}
+			logChannel.send(embed);
 		});
 		this.server.on('PLAYER_POSSESS', data => {
 			if(data.classname === 'CameraMan') {
