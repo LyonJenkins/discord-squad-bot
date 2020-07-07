@@ -10,7 +10,7 @@ export default class FileTail extends EventEmitter {
 	main() {
 		const tail = new Tail(this.filePath);
 		tail.on('line', data => {
-			this.emit('new line', data);
+			this.emit('line', data);
 		});
 	}
 }
