@@ -3,19 +3,19 @@ const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION',
 client.commands = new Discord.Collection();
 import * as commands from './commands';
 import { signupReactionAdd, signupReactionRemove } from './commands/createSignup';
-import { Server } from './server';
+import { Server } from './server/squad';
 let server;
+for(const command of commands.default) {
+    client.commands.set(command.name.toLowerCase(), command);
+}
 
-Object.values(commands).forEach((command) => {
-   client.commands.set(command.name.toLowerCase(), command);
-});
 
 import { adminRoleID, BOT_TOKEN, prefix } from './config';
-import { checkForRefreshReaction, properArgs } from './functions/helperFuncs';
+import { checkForRefreshReaction, properArgs } from './functions';
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
-    server = new Server('public', client);
+    server = new Server('Public', client);
     server.main();
 });
 
@@ -26,41 +26,29 @@ client.on('message', message  => {
         let command = client.commands.get(commandName);
 
         if(!command) {
-            Object.values(commands).forEach((cmd) => {
-                const commandClass = new cmd();
-                if(commandClass.aliases.indexOf(commandName) > -1) {
-                    command = cmd;
-                }
-            });
-        }
-
-        let commandClass;
-        try {
-            commandClass = new command()
-        } catch (err) {
             return;
         }
 
-        if(commandClass.disabled) {
+        if(command.disabled) {
             return;
         }
 
-        if(commandClass.adminOnly) {
+        if(command.adminOnly) {
             if(!message.member.roles.cache.find(role => role.id === adminRoleID)) {
                 return message.reply('you are not authorized to use that command.');
             }
         }
 
-        if (commandClass.guildOnly && message.channel.type !== 'text') {
+        if (command.guildOnly && message.channel.type !== 'text') {
             return message.reply('that command cannot be executed inside direct messages.');
         }
 
-        if(commandClass.args && !args.length) {
+        if(command.args && !args.length) {
             return message.reply(properArgs(command));
         }
 
         try {
-            commandClass.execute(message, args, server);
+            command.execute(message, args, server);
         } catch (error) {
             console.error(error);
             message.reply('there was an error trying to execute that command!');
