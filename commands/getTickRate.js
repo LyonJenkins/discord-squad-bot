@@ -1,13 +1,10 @@
-export default class getTickRate {
-	constructor() {
-		this.name = 'getTickRate';
-		this.description = 'Returns tick rate from the public server';
-		this.args = false;
-		this.guildOnly = true;
-		this.aliases = ['tickrate', 'tr'];
-		this.disabled = false;
-	}
-
+export default {
+	name: 'getTickRate',
+	description: 'Returns tick rate from the public server',
+	args: false,
+	guildOnly: true,
+	aliases: ['tickrate', 'tr'],
+	disabled: false,
 	execute(message, args, server) {
 		return message.reply(`server tick rate is ${server.tickRate}.`)
 	}

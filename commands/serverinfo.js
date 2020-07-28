@@ -1,13 +1,10 @@
-export default class serverInfo {
-	constructor() {
-		this.name = 'server';
-		this.description = 'Returns info on the public server';
-		this.args = false;
-		this.guildOnly = true;
-		this.aliases = ['si', 'server'];
-		this.disabled = false;
-	}
-
+export default {
+	name: 'server',
+	description: 'Returns info on the public server',
+	args: false,
+	guildOnly: true,
+	aliases: ['si', 'server'],
+	disabled: false,
 	execute(message, args, server) {
 		server.generateEmbed().then(embed => {
 			message.channel.send(embed).then(msg => {

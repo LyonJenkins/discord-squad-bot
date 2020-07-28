@@ -1,23 +1,20 @@
-import { properArgs } from '../functions/helperFuncs';
+import { properArgs } from '../functions';
 
 const fs = require('fs');
 const Discord = require('discord.js');
 import { EventEmitter } from 'events';
 import { signupsChannel } from '../config';
 
-export default class createSignup {
-	constructor() {
-		this.name = 'createsignup';
-		this.description = 'Creates an event signup';
-		this.usage = '[name] [date]';
-		this.args = true;
-		this.guildOnly = true;
-		this.aliases = [''];
-		this.disabled = false;
-		this.client = true;
-		this.adminOnly = true;
-	}
-
+export default {
+	name: 'createsignup',
+	description: 'Creates an event signup',
+	usage: '[name] [date]',
+	args: true,
+	guildOnly: true,
+	aliases: [''],
+	disabled: false,
+	client: true,
+	adminOnly: true,
 	execute(message, args) {
 		message.delete({timeout: 5000});
 		args = args.join(' ');

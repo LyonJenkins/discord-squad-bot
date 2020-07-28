@@ -3,17 +3,14 @@ const SteamAPI = require('web-api-steam');
 const got = require('got');
 import { steamAPIkey, whitelistPath } from '../config';
 
-export default class whitelist {
-    constructor() {
-        this.name = 'whitelist';
-        this.description = 'Adds the specified Steam 64 ID or the Steam 64 ID from the profile specified to the whitelist.';
-        this.usage = '<steam64id or steam profile url>';
-        this.args = true;
-        this.guildOnly = false;
-        this.aliases = ['wl'];
-        this.disabled = false;
-    }
-
+export default {
+    name: 'whitelist',
+    description: 'Adds the specified Steam 64 ID or the Steam 64 ID from the profile specified to the whitelist.',
+    usage: '<steam64id or steam profile url>',
+    args: true,
+    guildOnly: false,
+    aliases: ['wl'],
+    disabled: false,
     execute(message, args) {
         let steamID = args[0];
         message.delete({timeout: 1000});
