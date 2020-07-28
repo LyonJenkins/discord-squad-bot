@@ -5,7 +5,6 @@ export default {
 	description:'Gets reactions for a certain message',
 	args: true,
 	guildOnly: true,
-	aliases: [''],
 	disabled: false,
 	execute(message, args, server) {
 		const regex = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;

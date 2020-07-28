@@ -6,7 +6,6 @@ export default {
 	usage: '',
 	args: false,
 	guildOnly: false,
-	aliases: [],
 	disabled: false,
 	adminOnly: true,
 	execute(message, args) {

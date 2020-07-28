@@ -7,7 +7,6 @@ export default {
 	server: {},
 	args: true,
 	guildOnly: true,
-	aliases: [''],
 	disabled: false,
 	execute(message, args, server) {
 		server = servers.find(x => x.name === args[0].toLowerCase());

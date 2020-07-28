@@ -11,7 +11,6 @@ export default {
 	usage: '[name] [date]',
 	args: true,
 	guildOnly: true,
-	aliases: [''],
 	disabled: true,
 	client: true,
 	adminOnly: true,
