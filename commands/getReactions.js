@@ -21,7 +21,6 @@ export default {
 		if(!channel) return message.reply('the signups channel specified in the config does not exist.');
 		channel.messages.fetch(messageID).then(signupsMessage => {
 			const reactionsArray = signupsMessage.reactions.cache.array();
-			let embedBody = "";
 			generateSignups(reactionsArray).then(embedBody => {
 				message.channel.send(embedBody);
 			});
