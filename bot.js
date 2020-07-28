@@ -11,7 +11,7 @@ for(const command of commands.default) {
 
 
 import { adminRoleID, BOT_TOKEN, prefix } from './config';
-import { checkForRefreshReaction, properArgs } from './functions';
+import { checkForRefreshReaction, properArgs, reactionGiveRole } from './functions';
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -69,6 +69,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     const message = reaction.message;
     checkForRefreshReaction(message, reaction, user, server);
     signupReactionAdd(message, reaction, user);
+    reactionGiveRole(message, reaction, user);
 });
 
 client.on('messageReactionRemove', async (reaction, user) => {
@@ -83,6 +84,7 @@ client.on('messageReactionRemove', async (reaction, user) => {
 
     const message = reaction.message;
     signupReactionRemove(message, reaction, user);
+    reactionGiveRole(message, reaction, user);
 });
 
 client.login(BOT_TOKEN);
