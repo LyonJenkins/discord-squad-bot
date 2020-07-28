@@ -12,7 +12,7 @@ export default {
 	args: true,
 	guildOnly: true,
 	aliases: [''],
-	disabled: false,
+	disabled: true,
 	client: true,
 	adminOnly: true,
 	execute(message, args) {
