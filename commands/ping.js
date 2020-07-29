@@ -7,7 +7,9 @@ export default {
 	disabled: false,
 	adminOnly: true,
 	execute(message, args) {
-		message.reply('pong!')
+		message.reply('Pinging').then(msg => {
+			msg.edit(`Ping is ${msg.createdAt - message.createdAt}ms`);
+		});
 	}
 }
 
