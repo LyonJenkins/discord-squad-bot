@@ -7,7 +7,6 @@ export default {
 	guildOnly: true,
 	disabled: false,
 	execute(message, args, server) {
-		return message.reply('<:Coolestuparrow:697282672354918483>');
 		const regex = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
 		const parsedURL = args[0].match(regex);
 		let messageID;
