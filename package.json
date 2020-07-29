@@ -5,8 +5,7 @@
   "main": "bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel-node bot.js",
-    "watch": "nodemon --config nodemon.json --exec babel-node bot.js"
+    "start": "nodemon --config nodemon.json --exec babel-node bot.js"
   },
   "nodemonConfig": {
     "ignore": [
