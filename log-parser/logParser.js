@@ -24,12 +24,13 @@ export default class LogParser {
 
 }
 
-async function handleLine(line, logParser) {
+async function handleLine(data, logParser) {
 	for(const rule of rules) {
-		const match = line.match(rule.regex);
+		if(rule.skip) continue;
+		const match = data.line.match(rule.regex);
 		if(match) {
 			match[1] = moment.utc(match[1], 'YYYY.MM.DD-hh.mm.ss:SSS').toDate();
-			await rule.parseArgs(match, logParser);
+			await rule.parseArgs(match, logParser, data.lines);
 			break;
 		}
 	}
