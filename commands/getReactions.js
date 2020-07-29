@@ -7,6 +7,7 @@ export default {
 	guildOnly: true,
 	disabled: false,
 	adminOnly: true,
+	aliases: ['gr'],
 	execute(message, args, server) {
 		const regex = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
 		const parsedURL = args[0].match(regex);
