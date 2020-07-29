@@ -7,6 +7,7 @@ export default {
 	guildOnly: true,
 	disabled: false,
 	execute(message, args, server) {
+		return message.reply('<:Coolestuparrow:697282672354918483>');
 		const regex = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
 		const parsedURL = args[0].match(regex);
 		let messageID;
@@ -33,7 +34,6 @@ export default {
 async function generateSignups(reactionsArray) {
 	let embedBody = "";
 	for(const reaction of reactionsArray) {
-		break message.reply(reaction.emoji.toString());
 		embedBody+=`${reaction.count} user(s) reacted with ${reaction.emoji.toString()}\n`;
 		let users = await reaction.users.fetch();
 		for(const user of users.array()) {
