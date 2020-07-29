@@ -5,6 +5,7 @@ import newLine from './newLine';
 import getTickRate from './getTickRate';
 import Arma from './arma';
 import getReactions from './getReactions';
+import ping from './ping';
 
 export default [
 	serverInfo,
@@ -13,5 +14,6 @@ export default [
 	newLine,
 	getTickRate,
 	Arma,
-	getReactions
+	getReactions,
+	ping
 ];
