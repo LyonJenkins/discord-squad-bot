@@ -33,7 +33,9 @@ export default {
 async function generateSignups(reactionsArray) {
 	let embedBody = "";
 	for(const reaction of reactionsArray) {
-		embedBody+=`${reaction.count} user(s) reacted with ${reaction.emoji}\n`;
+		console.log(reaction.emoji.name);
+		embedBody+=`${reaction.count} user(s) reacted with ${reaction.emoji.toString()}\n`;
+		console.log(embedBody);
 		let users = await reaction.users.fetch();
 		for(const user of users.array()) {
 			embedBody+=`<@${user.id}>\n`;
