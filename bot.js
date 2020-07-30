@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'GUILD_MEMBER'] });
 client.commands = new Discord.Collection();
 import * as commands from './commands';
-import { signupReactionAdd, signupReactionRemove } from './commands/createSignup';
 import { Server } from './server/squad';
 let server;
 for(const command of commands.default) {
@@ -70,7 +69,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
     const message = reaction.message;
     checkForRefreshReaction(message, reaction, user, server);
-    signupReactionAdd(message, reaction, user);
     reactionGiveRole(message, reaction, user);
 });
 
@@ -85,7 +83,6 @@ client.on('messageReactionRemove', async (reaction, user) => {
     }
 
     const message = reaction.message;
-    signupReactionRemove(message, reaction, user);
     reactionGiveRole(message, reaction, user);
 });
 
