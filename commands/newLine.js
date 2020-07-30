@@ -19,9 +19,9 @@ export default {
 }
 
 function addLine(line) {
-	fs.appendFile('C:\\Users\\Lyon\\Documents\\GitHub\\bbr-bot\\SquadGame.log', line, (err) => {
-		if (err) {
-			return console.error(err);
-		}
-	});
+	// fs.appendFile('C:\\Users\\Lyon\\Documents\\GitHub\\bbr-bot\\SquadGame.log', line, (err) => {
+	// 	if (err) {
+	// 		return console.error(err);
+	// 	}
+	// });
 }
