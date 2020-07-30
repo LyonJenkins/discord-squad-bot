@@ -1,4 +1,4 @@
-import { signupsChannel } from '../config';
+import { signupsChannelID } from '../config';
 
 export default {
 	name: 'getReactions',
@@ -18,7 +18,7 @@ export default {
 			messageID = args[0];
 		}
 		const client = message.client;
-		const channel = client.channels.cache.get(signupsChannel);
+		const channel = client.channels.cache.get(signupsChannelID);
 		if(!channel) return message.reply('the signups channel specified in the config does not exist.');
 		channel.messages.fetch(messageID).then(signupsMessage => {
 			const reactionsArray = signupsMessage.reactions.cache.array();

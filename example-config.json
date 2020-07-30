@@ -1,5 +1,24 @@
 {
-  "BOT_TOKEN": "",
   "prefix": "",
-  "steamAPIkey": ""
+  "BOT_TOKEN": "",
+  "steamAPIkey": "",
+  "defaultServer": "",
+  "signupsChannelID": "",
+  "seedingChannelID": "",
+  "serverLogChannelID": "",
+  "serverStatusMessageID": "",
+  "whitelistPath": "",
+  "squadGameLogPath": "",
+  "adminRoles": [],
+  "allowableAddRoles": [],
+  "servers": [
+    {
+      "name": "",
+      "game": "",
+      "ip": "",
+      "port": "",
+      "queryPort": "",
+      "password": ""
+    }
+  ]
 }
