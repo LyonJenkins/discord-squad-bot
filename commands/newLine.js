@@ -6,7 +6,7 @@ export default {
 	usage: '',
 	args: false,
 	guildOnly: false,
-	disabled: false,
+	disabled: true,
 	adminOnly: true,
 	execute(message, args) {
 		//addLine('\r\n[2020.07.05-02.10.35:294][324]LogSquad: USQGameState: Server Tick Rate: 26');
