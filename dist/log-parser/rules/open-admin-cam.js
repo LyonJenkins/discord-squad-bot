@@ -1,18 +1,1 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _default = {
-  regex: /^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquadTrace: \[DedicatedServer](?:ASQPlayerController::)?OnPossess\(\): PC=(.+) Pawn=([A-z0-9_]+)_C/,
-  parseArgs: function parseArgs(args, logParser) {
-    var data = {
-      time: args[1],
-      player: args[3],
-      classname: args[4]
-    };
-    logParser.server.emit('PLAYER_POSSESS', data);
-  }
-};
-exports["default"] = _default;
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports["default"]=void 0;var _default={regex:/^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquadTrace: \[DedicatedServer](?:ASQPlayerController::)?OnPossess\(\): PC=(.+) Pawn=([A-z0-9_]+)_C/,parseArgs:function parseArgs(a,b){var c={time:a[1],player:a[3],classname:a[4]};b.server.emit("PLAYER_POSSESS",c)}};exports["default"]=_default;

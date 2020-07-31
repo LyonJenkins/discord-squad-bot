@@ -1,15 +1,1 @@
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-Object.defineProperty(exports, "LogParser", {
-  enumerable: true,
-  get: function get() {
-    return _logParser["default"];
-  }
-});
-
-var _logParser = _interopRequireDefault(require("./logParser"));
+"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault");var _logParser=_interopRequireDefault(require("./logParser"));Object.defineProperty(exports,"__esModule",{value:!0}),Object.defineProperty(exports,"LogParser",{enumerable:!0,get:function get(){return _logParser["default"]}});

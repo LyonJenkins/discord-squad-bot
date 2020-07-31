@@ -1,17 +1,1 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _default = {
-  regex: /^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquad: PostLogin: NewPlayer: (.*) \/(.*)\/(.*):PersistentLevel.(.*)/,
-  skip: true,
-  parseArgs: function parseArgs(args) {
-    return {
-      time: args[1],
-      playerController: args[6]
-    };
-  }
-};
-exports["default"] = _default;
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports["default"]=void 0;var _default={regex:/^\[([0-9.:-]+)]\[([ 0-9]*)]LogSquad: PostLogin: NewPlayer: (.*) \/(.*)\/(.*):PersistentLevel.(.*)/,skip:!0,parseArgs:function parseArgs(a){return{time:a[1],playerController:a[6]}}};exports["default"]=_default;

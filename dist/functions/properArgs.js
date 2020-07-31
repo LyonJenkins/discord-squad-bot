@@ -1,18 +1,1 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = properArgs;
-
-var _config = require("../../config");
-
-function properArgs(command) {
-  var reply = "you did not provide the proper command arguments.";
-
-  if (command.usage) {
-    reply += "\nThe proper usage would be: `".concat(_config.prefix).concat(command.name, " ").concat(command.usage, "`");
-  }
-
-  return reply;
-}
+"use strict";var _config=require("../../config");Object.defineProperty(exports,"__esModule",{value:!0}),exports["default"]=properArgs;function properArgs(a){var b="you did not provide the proper command arguments.";return a.usage&&(b+="\nThe proper usage would be: `".concat(_config.prefix).concat(a.name," ").concat(a.usage,"`")),b}
