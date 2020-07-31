@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { servers } from '../../config';
+import { servers } from '../../../config';
 import { Events } from './index';
 const Discord = require('discord.js');
 const Gamedig = require('gamedig');

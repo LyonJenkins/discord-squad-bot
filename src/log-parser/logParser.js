@@ -1,7 +1,7 @@
 import FileTail from './tail';
 import rules from './rules';
 import * as moment from 'moment';
-import { squadGameLogPath } from '../config';
+import { squadGameLogPath } from '../../config';
 import async from 'async';
 
 export default class LogParser {

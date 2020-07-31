@@ -1,4 +1,4 @@
-import { allowableAddRoles } from '../config';
+import { allowableAddRoles } from '../../config';
 
 export default function reactionGiveRole(message, reaction, user) {
 	for (const roleId of allowableAddRoles) {

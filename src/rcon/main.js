@@ -1,5 +1,5 @@
 const { Rcon } = require("rcon-client");
-const config = require('../config.json');
+const config = require('../../config.json');
 
 export async function listPlayers(server) {
     if(!server) server = 'rcon test';

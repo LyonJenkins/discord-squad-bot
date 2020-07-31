@@ -9,7 +9,7 @@ for(const command of commands.default) {
 }
 
 
-import { adminRoles, BOT_TOKEN, prefix } from './config';
+import { adminRoles, BOT_TOKEN, prefix } from '../config';
 import { checkForRefreshReaction, properArgs, reactionGiveRole } from './functions';
 
 client.on('ready', () => {

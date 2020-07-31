@@ -1,6 +1,5 @@
 import { LogParser } from '../../log-parser';
-import { seedingChannelID, serverLogChannelID, serverStatusMessageID } from '../../config';
-import * as moment from 'moment';
+import { seedingChannelID, serverLogChannelID, serverStatusMessageID } from '../../../config';
 const Discord = require('discord.js');
 import * as postLoginRule from '../../log-parser/rules/post-login'
 

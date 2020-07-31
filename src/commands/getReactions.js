@@ -1,4 +1,4 @@
-import { signupsChannelID } from '../config';
+import { signupsChannelID } from '../../config';
 
 export default {
 	name: 'getReactions',

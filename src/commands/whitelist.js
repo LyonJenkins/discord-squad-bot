@@ -1,7 +1,7 @@
 const fs = require('fs');
 const SteamAPI = require('web-api-steam');
 const got = require('got');
-import { steamAPIkey, whitelistPath } from '../config';
+import { steamAPIkey, whitelistPath } from '../../config';
 
 export default {
     name: 'whitelist',

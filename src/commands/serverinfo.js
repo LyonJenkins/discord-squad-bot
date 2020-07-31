@@ -1,4 +1,4 @@
-import { servers } from '../config';
+import { servers } from '../../config';
 const Gamedig = require('gamedig');
 const Discord = require('discord.js');
 

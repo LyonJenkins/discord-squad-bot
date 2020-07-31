@@ -1,4 +1,4 @@
-import { prefix } from '../config';
+import { prefix } from '../../config';
 
 export default function properArgs(command) {
 	let reply = `you did not provide the proper command arguments.`;
