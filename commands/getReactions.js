@@ -22,9 +22,7 @@ export default {
 		if(!channel) return message.reply('the signups channel specified in the config does not exist.');
 		channel.messages.fetch(messageID).then(signupsMessage => {
 			const reactionsArray = signupsMessage.reactions.cache.array();
-			generateSignups(reactionsArray).then(embedBody => {
-				message.channel.send(embedBody);
-			});
+			generateSignupsAndSend(reactionsArray, message);
 		}).catch(error => {
 			console.log(error);
 			if(error) return message.reply('there was an error trying to execute this command.');
@@ -32,14 +30,15 @@ export default {
 	}
 }
 
-async function generateSignups(reactionsArray) {
-	let embedBody = "";
+function generateSignupsAndSend(reactionsArray, message) {
 	for(const reaction of reactionsArray) {
-		embedBody+=`${reaction.count} user(s) reacted with ${reaction.emoji.toString()}\n`;
-		let users = await reaction.users.fetch();
-		for(const user of users.array()) {
-			embedBody+=`<@${user.id}>\n`;
-		}
+		let reactions = "";
+		reactions+=`${reaction.count} user(s) reacted with ${reaction.emoji.toString()}\n`;
+		reaction.users.fetch().then(users => {
+			for(const user of users.array()) {
+				reactions+=`<@${user.id}>\n`;
+			}
+			message.channel.send(reactions);
+		});
 	}
-	return embedBody;
 }
