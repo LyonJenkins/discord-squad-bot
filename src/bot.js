@@ -69,7 +69,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
     const message = reaction.message;
     checkForRefreshReaction(message, reaction, user, server);
-    reactionGiveRole(message, reaction, user);
+    reactionGiveRole(message, reaction, user, false);
 });
 
 client.on('messageReactionRemove', async (reaction, user) => {
@@ -83,7 +83,7 @@ client.on('messageReactionRemove', async (reaction, user) => {
     }
 
     const message = reaction.message;
-    reactionGiveRole(message, reaction, user);
+    reactionGiveRole(message, reaction, user, true);
 });
 
 client.login(BOT_TOKEN);

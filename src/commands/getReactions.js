@@ -1,4 +1,5 @@
 import { signupsChannelID } from '../../config';
+import { log } from '../functions';
 
 export default {
 	name: 'getReactions',
@@ -9,6 +10,7 @@ export default {
 	adminOnly: true,
 	aliases: ['gr'],
 	execute(message, args, server) {
+		log(`Entered ${this.name} command file`);
 		const regex = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
 		const parsedURL = args[0].match(regex);
 		let messageID;

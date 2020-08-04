@@ -2,6 +2,7 @@ const fs = require('fs');
 const SteamAPI = require('web-api-steam');
 const got = require('got');
 import { steamAPIkey, whitelistPath } from '../../config';
+import { log } from '../functions';
 
 export default {
     name: 'whitelist',
@@ -12,6 +13,7 @@ export default {
     aliases: ['wl'],
     disabled: false,
     execute(message, args) {
+        log(`Entered ${this.name} command file`);
         let steamID = args[0];
         message.delete({timeout: 1000});
         if(validURL(steamID)) {

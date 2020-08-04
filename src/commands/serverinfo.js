@@ -1,4 +1,5 @@
 import { servers } from '../../config';
+import { log } from '../functions';
 const Gamedig = require('gamedig');
 const Discord = require('discord.js');
 
@@ -10,6 +11,7 @@ export default {
 	aliases: ['si', 'server'],
 	disabled: false,
 	execute(message, args, server) {
+		log(`Entered ${this.name} command file`);
 		if(args[0]) {
 			// Handles Arma server embed
 			const foundServer = servers.find(x => x.name === args[0].toLowerCase());
@@ -43,7 +45,7 @@ export default {
 				message.channel.send(serverEmbed);
 			}).catch(error => {
 				console.log(error);
-				if(error) message.reply('an error has occurred, which means the server is most likely offline.');
+				if(error) message.reply('that server is offline.');
 			});
 		} else {
 			// Handles Squad
