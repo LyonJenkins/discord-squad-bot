@@ -1,3 +1,7 @@
+import moment from 'moment';
+
+
 export default function log(log) {
-	console.log(log);
+	const date = moment().format();
+	console.log(`[${date}] ${log}`);
 }
