@@ -61,6 +61,7 @@ export default class Events {
 	}
 
 	clientLogin(data, lines) {
+		console.log(data);
 		const linesArr = lines.split('\n');
 		const postLogin = linesArr[0];
 		const match = postLogin.match(postLoginRule.default.regex);
