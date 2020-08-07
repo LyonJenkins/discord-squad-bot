@@ -17,6 +17,7 @@ export default {
 		if(!channel) return message.reply('the signups channel specified in the config does not exist.');
 		channel.messages.fetch(args[0]).then(signupMessage => {
 			newSignup(signupMessage);
+			message.reply('added signup');
 		}).catch(error => {
 			console.log(error);
 			if(error) return message.reply('there was an error trying to execute this command.');
