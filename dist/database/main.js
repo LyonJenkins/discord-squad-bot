@@ -1,0 +1,1 @@
+"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault");Object.defineProperty(exports,"__esModule",{value:!0}),exports.db=void 0;var _mongoose=_interopRequireDefault(require("mongoose")),db=_mongoose["default"].connect("mongodb://localhost:27017/blueberrydb",{useNewUrlParser:!0,useUnifiedTopology:!0});exports.db=db;

@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports["default"]=newSignupsMessage;var _config=require("../../../config"),_signup=require("../../database/signup"),_functions=require("../../functions");function newSignupsMessage(a){a.channel.id===_config.signupsChannelID&&((0,_functions.log)("New signup found in signups channel"),(0,_signup.newSignup)(a))}
