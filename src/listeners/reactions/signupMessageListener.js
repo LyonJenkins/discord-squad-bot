@@ -11,7 +11,7 @@ export default function signupMessageListener(message, reaction, user, remove) {
 				const reactionEmbed = new Discord.MessageEmbed()
 					.setAuthor(`${user.username}`, `${user.avatarURL()}`)
 					.addFields(
-						{ name: 'Emoji Name', value: reaction.emoji.name },
+						{ name: 'Emoji', value: reaction.emoji.toString() },
 						{ name: 'Signup Name', value: message.content },
 					);
 				if(remove) {
