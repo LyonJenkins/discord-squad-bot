@@ -12,6 +12,7 @@ for(const command of commands.default) {
 import { adminRoles, BOT_TOKEN, prefix } from '../config';
 import { properArgs } from './functions';
 import { checkForRefreshReaction, reactionGiveRole, signupMessageListener } from './listeners/reactions';
+import { newSignupsMessage } from './listeners/messages';
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -20,6 +21,7 @@ client.on('ready', () => {
 });
 
 client.on('message', message  => {
+    newSignupsMessage(message);
     const args = message.content.slice(prefix.length).split(' ');
     const commandName = args.shift().toLowerCase();
     if (message.content.startsWith(prefix)) {
