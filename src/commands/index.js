@@ -4,6 +4,7 @@ import newLine from './newLine';
 import getTickRate from './getTickRate';
 import getReactions from './getReactions';
 import ping from './ping';
+import addSignup from './addSignup';
 
 export default [
 	serverInfo,
@@ -11,5 +12,6 @@ export default [
 	newLine,
 	getTickRate,
 	getReactions,
-	ping
+	ping,
+	addSignup
 ];
