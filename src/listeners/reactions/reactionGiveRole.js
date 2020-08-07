@@ -1,5 +1,5 @@
-import { addRoleMessageIDs } from '../../config';
-import { log } from './';
+import { addRoleMessageIDs } from '../../../config';
+import { log } from '../../functions';
 
 export default function reactionGiveRole(message, reaction, user, remove) {
 	log('Entered reactiveGiveRole function');

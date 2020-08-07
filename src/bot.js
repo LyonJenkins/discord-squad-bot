@@ -10,7 +10,8 @@ for(const command of commands.default) {
 
 
 import { adminRoles, BOT_TOKEN, prefix } from '../config';
-import { checkForRefreshReaction, properArgs, reactionGiveRole } from './functions';
+import { properArgs } from './functions';
+import { checkForRefreshReaction, reactionGiveRole, signupMessageListener } from './listeners/reactions';
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -70,6 +71,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     const message = reaction.message;
     checkForRefreshReaction(message, reaction, user, server);
     reactionGiveRole(message, reaction, user, false);
+    signupMessageListener(message, reaction, user, false);
 });
 
 client.on('messageReactionRemove', async (reaction, user) => {
@@ -84,6 +86,7 @@ client.on('messageReactionRemove', async (reaction, user) => {
 
     const message = reaction.message;
     reactionGiveRole(message, reaction, user, true);
+    signupMessageListener(message, reaction, user, true);
 });
 
 client.login(BOT_TOKEN);

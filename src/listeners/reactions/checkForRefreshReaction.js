@@ -1,4 +1,4 @@
-import { log } from './';
+import { log } from '../../functions';
 
 export default function checkForRefreshReaction(message, reaction, user, server) {
 	log('Entered checkForRefreshReaction function');
