@@ -67,10 +67,11 @@ export default class Events {
 	}
 
 	clientLogin(data, lines) {
+		console.log('client login one')
 		if(!serverLogging) return;
+		console.log('client login two')
 		const linesArr = lines.split('\n');
 		const postLogin = linesArr[0];
-		console.log(postLogin);
 		const match = postLogin.match(postLoginRule.default.regex);
 		if(match) {
 			const args = postLoginRule.default.parseArgs(match);
@@ -81,7 +82,6 @@ export default class Events {
 			};
 			fetchPlayers().then(players => {
 				const player = players.find(x => x.steam64ID === newPlayerObj.steam64ID);
-				console.log(player);
 				if(player) {
 					updatePlayer(player._id, newPlayerObj);
 				} else {
