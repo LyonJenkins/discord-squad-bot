@@ -20,6 +20,4 @@ client.on('ready', () => {
     }
 });
 
-
-
 client.login(BOT_TOKEN);
