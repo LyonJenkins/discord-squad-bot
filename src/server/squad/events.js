@@ -16,14 +16,16 @@ export default class Events {
 	main() {
 		const logParser = new LogParser(this.server);
 		logParser.main();
+		this.server.on('POST_LOGIN', data => {
+			console.log('POST_LOGIN');
+			console.log(data);
+			this.lastLoggedPlayer = data.playerController;
+		});
 		this.server.on('TICK_RATE', data => {
 			this.tickRate(data);
 		});
 		this.server.on('PLAYER_POSSESS', data => {
 			this.playerPossess(data);
-		});
-		this.server.on('CLIENT_LOGIN', (data, lines) => {
-			this.clientLogin(data, lines)
 		});
 		this.server.on('SERVER_UPDATE', () => {
 			this.serverUpdate();
@@ -31,8 +33,8 @@ export default class Events {
 		this.server.on('PLAYER_DIED', data => {
 			this.playerDied(data);
 		});
-		this.server.on('POST_LOGIN', data => {
-			this.lastLoggedPlayer = data.playerController;
+		this.server.on('CLIENT_LOGIN', (data, lines) => {
+			this.clientLogin(data, lines)
 		});
 	}
 
@@ -70,18 +72,20 @@ export default class Events {
 		}
 	}
 
-	clientLogin(data, lines) {
+	clientLogin(data) {
 		if(!serverLogging) return;
+		console.log('clientLogin');
+		console.log(this.lastLoggedPlayer);
 		if(this.lastLoggedPlayer) {
 			const newPlayerObj = {
 				name: data.name,
 				steam64ID: data.steam64ID,
 				playerController: this.lastLoggedPlayer,
 			};
-			fetchPlayers().then(players => {
-				const player = players.find(x => x.steam64ID === newPlayerObj.steam64ID);
-				if(player) {
-					updatePlayer(player._id, newPlayerObj);
+			fetchPlayers({steam64ID: data.steam64ID}).then(player => {
+				console.log(player);
+				if(player[0]) {
+					updatePlayer(player[0]._id, newPlayerObj);
 				} else {
 					newPlayer(newPlayerObj);
 				}
