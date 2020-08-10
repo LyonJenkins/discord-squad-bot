@@ -10,6 +10,7 @@ export default class Events {
 	constructor(server) {
 		this.server = server;
 		this.logChannel = this.server.client.channels.cache.find(channel => channel.id === serverLogChannelID);
+		this.lastLoggedPlayer = undefined;
 	}
 
 	main() {
@@ -68,15 +69,11 @@ export default class Events {
 
 	clientLogin(data, lines) {
 		if(!serverLogging) return;
-		const linesArr = lines.split('\n');
-		const postLogin = linesArr[0];
-		const match = postLogin.match(postLoginRule.default.regex);
-		if(match) {
-			const args = postLoginRule.default.parseArgs(match);
+		if(this.lastLoggedPlayer) {
 			const newPlayerObj = {
 				name: data.name,
 				steam64ID: data.steam64ID,
-				playerController: args.playerController,
+				playerController: this.lastLoggedPlayer,
 			};
 			fetchPlayers().then(players => {
 				const player = players.find(x => x.steam64ID === newPlayerObj.steam64ID);
@@ -86,6 +83,7 @@ export default class Events {
 					newPlayer(newPlayerObj);
 				}
 			});
+			this.lastLoggedPlayer = undefined;
 		}
 	}
 
