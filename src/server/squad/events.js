@@ -67,9 +67,7 @@ export default class Events {
 	}
 
 	clientLogin(data, lines) {
-		console.log('client login one')
 		if(!serverLogging) return;
-		console.log('client login two')
 		const linesArr = lines.split('\n');
 		const postLogin = linesArr[0];
 		const match = postLogin.match(postLoginRule.default.regex);
@@ -80,14 +78,11 @@ export default class Events {
 				steam64ID: data.steam64ID,
 				playerController: args.playerController,
 			};
-			console.log('client login three')
 			fetchPlayers().then(players => {
 				const player = players.find(x => x.steam64ID === newPlayerObj.steam64ID);
 				if(player) {
-					console.log('client login five');
 					updatePlayer(player._id, newPlayerObj);
 				} else {
-					console.log('client login four');
 					newPlayer(newPlayerObj);
 				}
 			});
