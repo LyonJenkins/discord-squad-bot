@@ -35,7 +35,6 @@
     "mongoose": "^5.9.27",
     "nodemon": "^2.0.4",
     "rcon-client": "^4.2.0",
-    "read-last-lines": "^1.7.2",
     "tail": "^2.0.4",
     "web-api-steam": "^1.0.8"
   },
