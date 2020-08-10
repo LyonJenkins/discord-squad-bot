@@ -1,29 +1,57 @@
 import { fetchSignups } from '../../database/signup';
-import { signupChangesID } from '../../../config';
+import { signupsChannelID, signupChangesID } from '../../../config';
 const Discord = require('discord.js');
 
 export default function signupMessageListener(message, reaction, user, remove) {
 	fetchSignups().then((signups) => {
 		for(const signup of signups) {
 			if(signup.discordMessageID === message.id) {
-				const channel = message.client.channels.cache.get(signupChangesID);
-				if(!channel) return message.reply('the signups channel specified in the config does not exist.');
-				const reactionEmbed = new Discord.MessageEmbed()
-					.setAuthor(`${user.username}`, `${user.avatarURL()}`)
-					.addFields(
-						{ name: 'Emoji', value: reaction.emoji.toString() },
-						{ name: 'Signup Name', value: message.content },
-					);
-				if(remove) {
-					reactionEmbed.setColor('#ff0000');
-					reactionEmbed.setTitle('Reaction Removed');
-					channel.send(reactionEmbed);
-				} else {
-					reactionEmbed.setColor('#00FF00');
-					reactionEmbed.setTitle('Reaction Added');
-					channel.send(reactionEmbed);
-				}
+				updateSignups(signup, message);
 			}
 		}
 	});
+}
+
+function updateSignups(signup, message) {
+	const channel = message.client.channels.cache.get(signupsChannelID);
+	if(!channel) return;
+	channel.messages.fetch(signup.discordMessageID).then(msg => {
+		const reactions = msg.reactions.cache.array();
+		generateReactionList(reactions).then(list => {
+			const signupChanges = message.client.channels.cache.get(signupChangesID);
+			if(!signupChanges) return;
+			let signupEmbed = new Discord.MessageEmbed()
+				.setTitle(`${message.content}`)
+				.setFooter(`${message.id}`)
+				.setTimestamp()
+				.setColor('#0099ff');
+			for(const reaction of list) {
+				let userlist = "";
+				for(const user of reaction.users) {
+					userlist+=user+"\n";
+				}
+				signupEmbed.addField(reaction.emoji, userlist);
+			}
+			signupChanges.messages.fetch(signup.discordSignupEmbedID).then(signupMessage => {
+				if(!signupMessage) return;
+				signupMessage.edit(signupEmbed);
+			});
+		});
+	});
+}
+
+async function generateReactionList(reactions) {
+	let usersArray = [];
+	for(const reaction of reactions) {
+		let usersObject = {};
+		usersObject.emoji = reaction.emoji.toString()+"\n";
+		usersObject.users = [];
+		const users = await reaction.users.fetch();
+		const reactionUsers = users.array();
+		for(const user of reactionUsers) {
+			usersObject.users.push(user.toString());
+		}
+		usersArray.push(usersObject);
+	}
+	return usersArray;
 }
