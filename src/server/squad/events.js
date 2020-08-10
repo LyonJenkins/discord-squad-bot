@@ -70,6 +70,7 @@ export default class Events {
 		if(!serverLogging) return;
 		const linesArr = lines.split('\n');
 		const postLogin = linesArr[0];
+		console.log(postLogin);
 		const match = postLogin.match(postLoginRule.default.regex);
 		if(match) {
 			const args = postLoginRule.default.parseArgs(match);
