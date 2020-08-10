@@ -1,9 +1,11 @@
 import { EventEmitter } from 'events';
 import { servers } from '../../../config';
 import { Events } from './index';
-import { listPlayers } from '../../rcon/main';
+import RconConnection from '../../rcon/main';
 import { fetchPlayers } from '../../database/player';
 import { fetchKills } from '../../database/kill';
+import { getSteamUser } from '../../functions';
+
 const Discord = require('discord.js');
 const Gamedig = require('gamedig');
 
@@ -28,6 +30,8 @@ export default class Server extends EventEmitter {
 	main() {
 		const events = new Events(this);
 		events.main();
+		this.rcon = new RconConnection('rcon test');
+		this.rcon.main();
 		this.setServerData().then(() => {
 			this.emit('SERVER_UPDATE');
 			const serverDataRefresh = setInterval(() => {
@@ -117,7 +121,7 @@ export default class Server extends EventEmitter {
 	}
 
 	async getServerPlayers() {
-		const response = await listPlayers();
+		const response = await this.rcon.listPlayers();
 		const lines = response.split('\n');
 		let players = [];
 		const regex = /ID: ([0-9]*) \| SteamID: ([0-9]*) \| Name: ([\s\S]*) \| Team ID: ([0-9]*) \| Squad ID: ([\s\S]*)/;
@@ -166,8 +170,15 @@ export default class Server extends EventEmitter {
 			const name = args.join(' ');
 			foundPlayer = await fetchPlayers({name});
 		} else {
-			const steam64ID = args[0];
-			foundPlayer = await fetchPlayers({steam64ID});
+			foundPlayer = await fetchPlayers({name: args[0]});
+			if(foundPlayer.length === 0) {
+				const user = await getSteamUser(args[0]);
+				if(user === undefined) {
+					return undefined;
+				}
+				const steam64ID = user.steamID;
+				foundPlayer = await fetchPlayers({steam64ID});
+			}
 		}
 
 		if(foundPlayer.length === 0) {

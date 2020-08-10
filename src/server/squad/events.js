@@ -1,6 +1,5 @@
 import { LogParser } from '../../log-parser';
 import { seedingChannelID, serverLogChannelID, serverLogging, serverStatusMessageID } from '../../../config';
-import * as postLoginRule from '../../log-parser/rules/post-login';
 import { fetchPlayers, newPlayer, updatePlayer } from '../../database/player';
 import { newKill } from '../../database/kill';
 
@@ -98,6 +97,12 @@ export default class Events {
 		if(!serverLogging) return;
 		this.server.getPlayerByName(data.victim).then(victim => {
 			this.server.getPlayerByController(data.attackerPlayerController).then(killer => {
+				if(victim === undefined) {
+					victim = { steam64ID: data.victim };
+				}
+				if(killer.length === 0) {
+					killer[0] = { steam64ID: data.attackerPlayerController };
+				}
 				this.server.sameTeam(victim.steam64ID, killer[0].steam64ID).then(teamkill => {
 					const newKillObj = {
 						victim: victim.steam64ID,
