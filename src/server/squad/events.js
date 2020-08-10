@@ -80,6 +80,7 @@ export default class Events {
 			};
 			fetchPlayers().then(players => {
 				const player = players.find(x => x.steam64ID === newPlayerObj.steam64ID);
+				console.log(player);
 				if(player) {
 					updatePlayer(player._id, newPlayerObj);
 				} else {
