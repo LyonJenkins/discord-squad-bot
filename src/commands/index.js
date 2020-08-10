@@ -5,6 +5,7 @@ import getTickRate from './getTickRate';
 import getReactions from './getReactions';
 import ping from './ping';
 import addSignup from './addSignup';
+import kd from './kd'
 
 export default [
 	serverInfo,
@@ -13,5 +14,6 @@ export default [
 	getTickRate,
 	getReactions,
 	ping,
-	addSignup
+	addSignup,
+	kd
 ];
