@@ -1,8 +1,12 @@
 import { EventEmitter } from 'events';
 import { servers } from '../../../config';
 import { Events } from './index';
+import { listPlayers } from '../../rcon/main';
+import { fetchPlayers } from '../../database/player';
+import { fetchKills } from '../../database/kill';
 const Discord = require('discord.js');
 const Gamedig = require('gamedig');
+
 
 export default class Server extends EventEmitter {
 	constructor(serverName, client) {
@@ -18,6 +22,7 @@ export default class Server extends EventEmitter {
 		this.reservedQueue = 0;
 		this.tickRate = 0;
 		this.client = client;
+		this.players = [];
 	}
 
 	main() {
@@ -25,8 +30,9 @@ export default class Server extends EventEmitter {
 		events.main();
 		this.setServerData().then(() => {
 			this.emit('SERVER_UPDATE');
-			setInterval(() => {
+			const serverDataRefresh = setInterval(() => {
 				this.parseServerData().then(data => {
+					if(data === undefined) return;
 					if(data.playerCount !== this.playerCount || data.map !== this.map || data.publicQueue !== this.publicQueue || data.reservedQueue !== this.reservedQueue || data.publicSlots !== this.publicSlots || data.reservedSlots !== this.reservedSlots) {
 						this.refresh();
 					}
@@ -50,6 +56,7 @@ export default class Server extends EventEmitter {
 
 	async setServerData() {
 		const data = await this.parseServerData();
+		if(data === undefined) return;
 		this.playerCount = data.playerCount;
 		this.map = data.map;
 		this.maxPlayers = data.maxplayers;
@@ -64,6 +71,7 @@ export default class Server extends EventEmitter {
 		const state = await this.queryServer().catch(error => {
 			console.log(error);
 		});
+		if(state === undefined) return undefined;
 		return {
 			playerCount: parseInt(state.raw.rules.PlayerCount_i),
 			map: state.map,
@@ -106,5 +114,73 @@ export default class Server extends EventEmitter {
 		this.setServerData().then(() => {
 			this.emit('SERVER_UPDATE');
 		});
+	}
+
+	async getServerPlayers() {
+		const response = await listPlayers();
+		const lines = response.split('\n');
+		let players = [];
+		const regex = /ID: ([0-9]*) \| SteamID: ([0-9]*) \| Name: ([\s\S]*) \| Team ID: ([0-9]*) \| Squad ID: ([\s\S]*)/;
+		for(const line of lines) {
+			const args = line.match(regex);
+			if(args) {
+				const playerObj = {
+					id: args[1],
+					steam64ID: args[2],
+					username: args[3],
+					teamID: args[4],
+					squadID: args[5]
+				};
+				players.push(playerObj);
+			}
+		}
+		this.players = players;
+	}
+
+	async getPlayerByName(name) {
+		await this.getServerPlayers();
+		const players = this.players;
+		return players.find(x => x.username === name);
+	}
+
+	async getPlayerByController(playerController) {
+		return await fetchPlayers({ playerController });
+	}
+
+	async sameTeam(victim, killer) {
+		await this.getServerPlayers();
+		const players = this.players;
+		const playerVictim = players.find(x => x.steam64ID === victim);
+		const playerKiller = players.find(x => x.steam64ID === killer);
+		if(playerVictim && playerKiller) {
+			return playerVictim.teamID === playerKiller.teamID;
+		} else {
+			return undefined;
+		}
+	}
+
+	async getKD(player) {
+		const args = player.split(' ');
+		let foundPlayer;
+		if(args.length > 1) {
+			const name = args.join(' ');
+			foundPlayer = await fetchPlayers({name});
+		} else {
+			const steam64ID = args[0];
+			foundPlayer = await fetchPlayers({steam64ID});
+		}
+
+		if(foundPlayer.length === 0) {
+			return undefined;
+		} else {
+			foundPlayer = foundPlayer[0];
+			const kills = await fetchKills({killer: foundPlayer.steam64ID});
+			const deaths = await fetchKills({victim: foundPlayer.steam64ID});
+			return {
+				kills: kills.length,
+				deaths: deaths.length,
+				foundPlayer
+			}
+		}
 	}
 }

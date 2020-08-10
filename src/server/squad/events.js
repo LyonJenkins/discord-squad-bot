@@ -1,7 +1,10 @@
 import { LogParser } from '../../log-parser';
-import { seedingChannelID, serverLogChannelID, serverStatusMessageID } from '../../../config';
+import { seedingChannelID, serverLogChannelID, serverLogging, serverStatusMessageID } from '../../../config';
+import * as postLoginRule from '../../log-parser/rules/post-login';
+import { fetchPlayers, newPlayer, updatePlayer } from '../../database/player';
+import { newKill } from '../../database/kill';
+
 const Discord = require('discord.js');
-import * as postLoginRule from '../../log-parser/rules/post-login'
 
 export default class Events {
 	constructor(server) {
@@ -23,6 +26,9 @@ export default class Events {
 		});
 		this.server.on('SERVER_UPDATE', () => {
 			this.serverUpdate();
+		});
+		this.server.on('PLAYER_DIED', data => {
+			this.playerDied(data);
 		});
 	}
 
@@ -61,14 +67,43 @@ export default class Events {
 	}
 
 	clientLogin(data, lines) {
-		console.log(data);
+		if(!serverLogging) return;
 		const linesArr = lines.split('\n');
 		const postLogin = linesArr[0];
 		const match = postLogin.match(postLoginRule.default.regex);
 		if(match) {
 			const args = postLoginRule.default.parseArgs(match);
-			console.log(args);
+			const newPlayerObj = {
+				name: data.name,
+				steam64ID: data.steam64ID,
+				playerController: args.playerController,
+			};
+			fetchPlayers().then(players => {
+				const player = players.find(x => x.steam64ID === newPlayerObj.steam64ID);
+				if(player) {
+					updatePlayer(player._id, newPlayerObj);
+				} else {
+					newPlayer(newPlayerObj);
+				}
+			});
 		}
+	}
+
+	playerDied(data) {
+		if(!serverLogging) return;
+		this.server.getPlayerByName(data.victim).then(victim => {
+			this.server.getPlayerByController(data.attackerPlayerController).then(killer => {
+				this.server.sameTeam(victim.steam64ID, killer[0].steam64ID).then(teamkill => {
+					const newKillObj = {
+						victim: victim.steam64ID,
+						killer: killer[0].steam64ID,
+						weapon: data.weapon,
+						teamkill: teamkill
+					};
+					newKill(newKillObj);
+				});
+			});
+		});
 	}
 
 	serverUpdate() {
