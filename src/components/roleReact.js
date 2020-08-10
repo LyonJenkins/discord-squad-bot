@@ -1,7 +1,24 @@
-import { addRoleMessageIDs } from '../../../config';
-import { log } from '../../functions';
+import { handleReaction, log } from '../functions';
+import { addRoleMessageIDs } from '../../config';
 
-export default function reactionGiveRole(message, reaction, user, remove) {
+export default {
+	execute(client, server) {
+		client.on('messageReactionAdd', async (reaction, user) => {
+			await handleReaction(reaction);
+
+			const message = reaction.message;
+			reactionGiveRole(message, reaction, user, false);
+		});
+		client.on('messageReactionRemove', async (reaction, user) => {
+			await handleReaction(reaction);
+
+			const message = reaction.message;
+			reactionGiveRole(message, reaction, user, false);
+		});
+	}
+}
+
+function reactionGiveRole(message, reaction, user, remove) {
 	log('Entered reactiveGiveRole function');
 	for (const messageID of addRoleMessageIDs) {
 		if(message.id === messageID) {

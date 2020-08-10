@@ -1,9 +1,17 @@
-import { signupChangesID, signupsChannelID } from '../../../config';
-import { newSignup } from '../../database/signup';
-import { log } from '../../functions';
+import { signupChangesID, signupsChannelID } from '../../config';
+import { newSignup } from '../database/signup';
+import { log } from '../functions';
 const Discord = require('discord.js');
 
-export default function newSignupsMessage(message) {
+export default {
+	execute(client) {
+		client.on('message', message => {
+			newSignupsMessage(message);
+		});
+	}
+}
+
+function newSignupsMessage(message) {
 	if (message.channel.id === signupsChannelID) {
 		log('New signup found in signups channel');
 		const channel = message.client.channels.cache.get(signupChangesID);
@@ -17,5 +25,4 @@ export default function newSignupsMessage(message) {
 			newSignup(message, msg.id);
 		});
 	}
-
 }

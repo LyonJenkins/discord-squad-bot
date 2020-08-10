@@ -1,8 +1,25 @@
-import { fetchSignups } from '../../database/signup';
-import { signupsChannelID, signupChangesID } from '../../../config';
+import { fetchSignups } from '../database/signup';
+import { signupsChannelID, signupChangesID } from '../../config';
+import { handleReaction } from '../functions';
 const Discord = require('discord.js');
 
-export default function signupMessageListener(message, reaction, user, remove) {
+export default {
+	execute(client, server) {
+		client.on('messageReactionAdd', async (reaction, user) => {
+			await handleReaction(reaction);
+			const message = reaction.message;
+			signupMessageListener(message, reaction, user, false);
+		});
+
+		client.on('messageReactionRemove', async (reaction, user) => {
+			await handleReaction(reaction);
+			const message = reaction.message;
+			signupMessageListener(message, reaction, user, false);
+		});
+	}
+}
+
+function signupMessageListener(message, reaction, user, remove) {
 	fetchSignups().then((signups) => {
 		for(const signup of signups) {
 			if(signup.discordMessageID === message.id) {
