@@ -31,6 +31,9 @@ export default class Events {
 		this.server.on('PLAYER_DIED', data => {
 			this.playerDied(data);
 		});
+		this.server.on('POST_LOGIN', data => {
+			this.lastLoggedPlayer = data.playerController;
+		});
 	}
 
 	tickRate(data) {
