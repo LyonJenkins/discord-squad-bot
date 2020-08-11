@@ -1,5 +1,4 @@
 const { Rcon } = require("rcon-client");
-const config = require('../../config.json');
 
 export default class RconConnection {
     constructor(server) {
@@ -7,12 +6,17 @@ export default class RconConnection {
     }
 
     async main() {
-        const serverInfo = config.servers.find(x => x.name === this.server);
-        this.rcon = await Rcon.connect({
-            host: serverInfo.ip, port: serverInfo.rconPort, password: serverInfo.password
+        this.rcon = new Rcon({
+            host: this.server.ip, port: this.server.rconPort, password: this.server.password
         });
 
+        await this.rcon.connect();
+
+        this.rcon.on('end', () => {
+            this.rcon.connect();
+        });
     }
+
 
     async listPlayers() {
         return await this.rcon.send('ListPlayers').then(response => {
