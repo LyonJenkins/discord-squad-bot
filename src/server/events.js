@@ -119,7 +119,6 @@ export default class Events {
 						.addFields(
 							{ name: 'Victim', value: `${data.victim}` },
 							{ name: 'Killer', value: `${killer[0].name}` },
-							{ name: 'Weapon', value: `${data.weapon}` },
 							{ name: 'Teamkill', value: `${teamkill}` },
 							{ name: 'Action Timestamp', value: `${data.time}` },
 						)
