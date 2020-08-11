@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
 import { Kill } from '../models';
+import { connect } from '../main';
 
 export default async function fetchKills(key) {
-	mongoose.connect('mongodb://localhost:27017/blueberrydb', {useNewUrlParser: true, useUnifiedTopology: true});
+	connect();
 	if(!key) key = {};
 	return await Kill.find(key, (err, kills) => {
 		if (err) return console.log(err);

@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
 import { Signup } from '../models';
 import { log } from '../../functions';
+import { connect } from '../main';
 
 export default function newSignup(discordMessage, embedID) {
-	mongoose.connect('mongodb://localhost:27017/blueberrydb', {useNewUrlParser: true, useUnifiedTopology: true});
+	connect();
 	const newSignup = new Signup({
 		name: discordMessage.content,
 		discordMessageID: discordMessage.id,
