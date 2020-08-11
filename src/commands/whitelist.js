@@ -1,5 +1,6 @@
 const fs = require('fs');
 import { log, getSteamUser } from '../functions';
+import { servers, defaultServer } from '../../config';
 
 export default {
     name: 'whitelist',
@@ -9,23 +10,23 @@ export default {
     guildOnly: false,
     aliases: ['wl'],
     disabled: false,
-    execute(message, args, server) {
+    execute(message, args) {
         log(`Entered ${this.name} command file`);
         message.delete({timeout: 1000});
         getSteamUser(args[0]).then(user => {
-            console.log(user);
             if(user === undefined) {
                 return message.reply('that SteamID or URL is invalid.').then(msg => {
                     msg.delete({timeout: 5000});
                 })
             }
-            addUser(user, message, server);
+            addUser(user, message);
         });
     }
 }
 
-function addUser(user, message, server) {
-    fs.readFile(server.server.adminPath, 'utf-8', (err, whitelist) => {
+function addUser(user, message) {
+    const server = servers.find(x => x.name === defaultServer);
+    fs.readFile(server.adminPath, 'utf-8', (err, whitelist) => {
         if (err) {
             return console.error(err);
         }
@@ -38,7 +39,7 @@ function addUser(user, message, server) {
 
         const newUser = `\r\nAdmin=${user.steamID}:Whitelist // ${user.nickname}`;
 
-        fs.appendFile(server.server.adminPath, newUser, (err) => {
+        fs.appendFile(server.adminPath, newUser, (err) => {
             if (err) {
                 return console.error(err);
             }
