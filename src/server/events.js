@@ -75,7 +75,7 @@ export default class Events {
 	clientLogin(data) {
 		if(!serverLogging) return;
 		if(this.unhandledLogins.length > 0) {
-			const lastLoggedPlayer = this.unhandledLogins.find(x => x.chainID === data.chainID);
+			const lastLoggedPlayer = this.unhandledLogins.find(x => x.id === data.id);
 			if(lastLoggedPlayer) {
 				this.unhandledLogins.splice(this.unhandledLogins.indexOf(lastLoggedPlayer), 1);
 				const newPlayerObj = {

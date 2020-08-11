@@ -3,7 +3,7 @@ export default {
 	parseArgs: (args, logParser) => {
 		const data = {
 			time: args[1],
-			chainID: args[2],
+			id: args[2],
 			playerController: args[6]
 		};
 		logParser.server.emit('POST_LOGIN', data);
