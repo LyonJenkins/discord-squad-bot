@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { servers } from '../../config';
+import { leaderboardChannelID, leaderboardMessageID, servers } from '../../config';
 import { Events } from './index';
 import RconConnection from '../rcon/main';
 import { fetchPlayers } from '../database/player';
@@ -42,6 +42,14 @@ export default class Server extends EventEmitter {
 					}
 				});
 			}, 30000);
+			const leaderboardRefresh = setInterval(() => {
+				this.updateLeaderboards(10).then(embed => {
+					this.leaderBoardChannel.messages.fetch(leaderboardMessageID).then(msg => {
+						msg.edit(embed);
+					});
+				});
+
+			}, 86400000)
 		});
 	}
 
@@ -68,6 +76,7 @@ export default class Server extends EventEmitter {
 		this.reservedSlots = data.reservedSlots;
 		this.publicQueue = data.publicQueue;
 		this.reservedQueue = data.reservedQueue;
+		this.leaderBoardChannel = this.client.channels.cache.find(channel => channel.id === leaderboardChannelID);
 		this.name = data.name;
 	}
 
@@ -193,5 +202,47 @@ export default class Server extends EventEmitter {
 				foundPlayer
 			}
 		}
+	}
+
+	async updateLeaderboards(limit) {
+		const kills = await fetchKills();
+		const players = await fetchPlayers();
+		let killsAndDeaths = [];
+		for(const player of players) {
+			const playerKd = { playerKills: kills.filter(x => x.killer === player.steam64ID).length,
+				playerDeaths: kills.filter(x => x.victim === player.steam64ID).length,
+				name: player.name
+			};
+			if(playerKd.playerKills === 0 || playerKd.playerDeaths === 0) {
+				continue;
+			}
+			killsAndDeaths.push(playerKd);
+		}
+		killsAndDeaths.sort((a, b) => b.playerKills/b.playerDeaths - a.playerKills/a.playerDeaths);
+
+		let playerNames = '', position = '', playerKdr = '';
+		let condition = true;
+		let i = 0;
+		while(condition) {
+			if(!(i < limit) || !(i < killsAndDeaths.length)) {
+				break;
+			}
+			const kdPlayer = killsAndDeaths[i];
+			position+=`${(i+1)}\n`;
+			playerNames+=`${kdPlayer.name}\n`;
+			playerKdr+=`${kdPlayer.playerKills/kdPlayer.playerDeaths}\n`;
+			i++;
+		}
+
+		return new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle(`KDR Leaderboard (Showing Top ${limit})`)
+			.addFields(
+				{ name: 'Place', value: `${position}`, inline: true },
+				{ name: 'Name', value: playerNames, inline: true },
+				{ name: 'KDR', value: playerKdr, inline: true },
+			)
+			.setTimestamp()
+			.setFooter(this.name);
 	}
 }

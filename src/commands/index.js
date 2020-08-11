@@ -6,6 +6,7 @@ import getReactions from './getReactions';
 import ping from './ping';
 import addSignup from './addSignup';
 import kd from './kd'
+import leaderboard from './leaderboard';
 
 export default [
 	serverInfo,
@@ -15,5 +16,6 @@ export default [
 	getReactions,
 	ping,
 	addSignup,
-	kd
+	kd,
+	leaderboard
 ];
