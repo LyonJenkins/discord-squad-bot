@@ -3,6 +3,7 @@ const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION',
 client.commands = new Discord.Collection();
 import * as commands from './commands';
 import { Server } from './server';
+import { selectedServer } from '../config';
 
 for(const command of commands.default) {
     client.commands.set(command.name.toLowerCase(), command);
@@ -13,7 +14,7 @@ import components from './components';
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
-    const server = new Server('Public', client);
+    const server = new Server(selectedServer, client);
     server.main();
     for(const component of components) {
         component.execute(client, server);
