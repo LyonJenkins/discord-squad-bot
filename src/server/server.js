@@ -30,7 +30,7 @@ export default class Server extends EventEmitter {
 	main() {
 		const events = new Events(this);
 		events.main();
-		this.rcon = new RconConnection('rcon test');
+		this.rcon = new RconConnection(this.server.name);
 		this.rcon.main();
 		this.setServerData().then(() => {
 			this.emit('SERVER_UPDATE');

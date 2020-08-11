@@ -1,7 +1,6 @@
 import FileTail from './tail';
 import rules from './rules';
 import * as moment from 'moment';
-import { squadGameLogPath } from '../../config';
 import async from 'async';
 
 export default class LogParser {
@@ -15,7 +14,7 @@ export default class LogParser {
 	}
 
 	main() {
-		const fileTail = new FileTail(squadGameLogPath);
+		const fileTail = new FileTail(this.server.server.logPath);
 		fileTail.on('line', data => {
 			this.queue.push({data});
 		});

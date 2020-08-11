@@ -1,5 +1,4 @@
 const fs = require('fs');
-import { whitelistPath } from '../../config';
 import { log, getSteamUser } from '../functions';
 
 export default {
@@ -10,7 +9,7 @@ export default {
     guildOnly: false,
     aliases: ['wl'],
     disabled: false,
-    execute(message, args) {
+    execute(message, args, server) {
         log(`Entered ${this.name} command file`);
         message.delete({timeout: 1000});
         getSteamUser(args[0]).then(user => {
@@ -20,13 +19,13 @@ export default {
                     msg.delete({timeout: 5000});
                 })
             }
-            addUser(user, message);
+            addUser(user, message, server);
         });
     }
 }
 
-function addUser(user, message) {
-    fs.readFile(whitelistPath, 'utf-8', (err, whitelist) => {
+function addUser(user, message, server) {
+    fs.readFile(server.server.adminPath, 'utf-8', (err, whitelist) => {
         if (err) {
             return console.error(err);
         }
@@ -39,7 +38,7 @@ function addUser(user, message) {
 
         const newUser = `\r\nAdmin=${user.steamID}:Whitelist // ${user.nickname}`;
 
-        fs.appendFile(whitelistPath, newUser, (err) => {
+        fs.appendFile(server.server.adminPath, newUser, (err) => {
             if (err) {
                 return console.error(err);
             }
