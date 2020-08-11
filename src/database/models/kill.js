@@ -5,7 +5,8 @@ const Kill = new mongoose.Schema({
 	victim: String,
 	weapon: String,
 	teamkill: Boolean,
-	createdTimestamp: Date
+	createdTimestamp: Date,
+	serverName: String
 });
 
 export default mongoose.model('Kill', Kill);
