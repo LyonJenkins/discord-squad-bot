@@ -80,6 +80,7 @@ export default class Events {
 				name: data.name,
 				steam64ID: data.steam64ID,
 				playerController: this.lastLoggedPlayer,
+				createdTimestamp: data.time
 			};
 			fetchPlayers({steam64ID: data.steam64ID}).then(player => {
 				console.log(player);
@@ -108,7 +109,8 @@ export default class Events {
 						victim: victim.steam64ID,
 						killer: killer[0].steam64ID,
 						weapon: data.weapon,
-						teamkill: teamkill
+						teamkill: teamkill,
+						createdTimestamp: data.time
 					};
 					newKill(newKillObj);
 				});
