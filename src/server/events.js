@@ -10,16 +10,14 @@ export default class Events {
 		this.server = server;
 		this.logChannel = this.server.client.channels.cache.find(channel => channel.id === serverLogChannelID);
 		this.killLogChannel = this.server.client.channels.cache.find(channel => channel.id === killLogChannelID);
-		this.lastLoggedPlayer = undefined;
+		this.unhandledLogins = [];
 	}
 
 	main() {
 		const logParser = new LogParser(this.server);
 		logParser.main();
 		this.server.on('POST_LOGIN', data => {
-			console.log('POST_LOGIN');
-			console.log(data);
-			this.lastLoggedPlayer = data.playerController;
+			this.unhandledLogins.push(data);
 		});
 		this.server.on('TICK_RATE', data => {
 			this.tickRate(data);
@@ -33,8 +31,8 @@ export default class Events {
 		this.server.on('PLAYER_DIED', data => {
 			this.playerDied(data);
 		});
-		this.server.on('CLIENT_LOGIN', (data, lines) => {
-			this.clientLogin(data, lines)
+		this.server.on('CLIENT_LOGIN', data => {
+			this.clientLogin(data)
 		});
 	}
 
@@ -76,24 +74,24 @@ export default class Events {
 
 	clientLogin(data) {
 		if(!serverLogging) return;
-		console.log('clientLogin');
-		console.log(this.lastLoggedPlayer);
-		if(this.lastLoggedPlayer) {
-			const newPlayerObj = {
-				name: data.name,
-				steam64ID: data.steam64ID,
-				playerController: this.lastLoggedPlayer,
-				createdTimestamp: data.time
-			};
-			fetchPlayers({steam64ID: data.steam64ID}).then(player => {
-				console.log(player);
-				if(player[0]) {
-					updatePlayer(player[0]._id, newPlayerObj);
-				} else {
-					newPlayer(newPlayerObj);
-				}
-			});
-			this.lastLoggedPlayer = undefined;
+		if(this.unhandledLogins.length > 0) {
+			const lastLoggedPlayer = this.unhandledLogins.find(x => x.chainID === data.chainID);
+			if(lastLoggedPlayer) {
+				this.unhandledLogins.splice(this.unhandledLogins.indexOf(lastLoggedPlayer), 1);
+				const newPlayerObj = {
+					name: data.name,
+					steam64ID: data.steam64ID,
+					playerController: lastLoggedPlayer.playerController,
+					createdTimestamp: data.time
+				};
+				fetchPlayers({steam64ID: data.steam64ID}).then(player => {
+					if(player[0]) {
+						updatePlayer(player[0]._id, newPlayerObj);
+					} else {
+						newPlayer(newPlayerObj);
+					}
+				});
+			}
 		}
 	}
 

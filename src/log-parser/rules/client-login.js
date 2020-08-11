@@ -3,6 +3,7 @@ export default {
 	parseArgs: (args, logParser) => {
 		const data = {
 			time: args[1],
+			chainID: args[2],
 			steam64ID: args[4],
 			name: args[7],
 		};
