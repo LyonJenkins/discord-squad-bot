@@ -49,6 +49,7 @@ export default class Events {
 				{ name: 'Tick Rate', value: `${data.tickRate}` },
 				{ name: 'Action Timestamp', value: `${data.time}` },
 			)
+			.setFooter(this.server.name)
 			.setTimestamp();
 		if(data.tickRate <= 25 && data.tickRate > 20) {
 			embed.setColor('#FFFF00');
@@ -67,6 +68,7 @@ export default class Events {
 					{ name: 'Player Name', value: `${data.player}` },
 					{ name: 'Action Timestamp', value: `${data.time}` },
 				)
+				.setFooter(this.server.name)
 				.setTimestamp();
 			this.logChannel.send(embed);
 		}
