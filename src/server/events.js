@@ -1,7 +1,7 @@
-import { LogParser } from '../../log-parser';
-import { seedingChannelID, serverLogChannelID, serverLogging, serverStatusMessageID } from '../../../config';
-import { fetchPlayers, newPlayer, updatePlayer } from '../../database/player';
-import { newKill } from '../../database/kill';
+import { LogParser } from '../log-parser';
+import { seedingChannelID, serverLogChannelID, serverLogging, serverStatusMessageID, killLogChannelID } from '../../config';
+import { fetchPlayers, newPlayer, updatePlayer } from '../database/player';
+import { newKill } from '../database/kill';
 
 const Discord = require('discord.js');
 
@@ -9,6 +9,7 @@ export default class Events {
 	constructor(server) {
 		this.server = server;
 		this.logChannel = this.server.client.channels.cache.find(channel => channel.id === serverLogChannelID);
+		this.killLogChannel = this.server.client.channels.cache.find(channel => channel.id === killLogChannelID);
 		this.lastLoggedPlayer = undefined;
 	}
 
@@ -102,7 +103,7 @@ export default class Events {
 					victim = { steam64ID: data.victim };
 				}
 				if(killer.length === 0) {
-					killer[0] = { steam64ID: data.attackerPlayerController };
+					killer[0] = { steam64ID: data.attackerPlayerController, name: undefined };
 				}
 				this.server.sameTeam(victim.steam64ID, killer[0].steam64ID).then(teamkill => {
 					const newKillObj = {
@@ -112,6 +113,22 @@ export default class Events {
 						teamkill: teamkill,
 						createdTimestamp: data.time
 					};
+					const embed = new Discord.MessageEmbed()
+						.setColor('#0099ff')
+						.setTitle(`New Kill`)
+						.addFields(
+							{ name: 'Victim', value: `${data.victim}` },
+							{ name: 'Killer', value: `${killer[0].name}` },
+							{ name: 'Weapon', value: `${data.weapon}` },
+							{ name: 'Teamkill', value: `${teamkill}` },
+							{ name: 'Action Timestamp', value: `${data.time}` },
+						)
+						.setFooter(this.server.name)
+						.setTimestamp();
+					this.killLogChannel.send(embed);
+					if(teamkill) {
+						this.logChannel.send(embed);
+					}
 					newKill(newKillObj);
 				});
 			});

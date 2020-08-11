@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'GUILD_MEMBER'] });
 client.commands = new Discord.Collection();
 import * as commands from './commands';
-import { Server } from './server/squad';
+import { Server } from './server';
 
 for(const command of commands.default) {
     client.commands.set(command.name.toLowerCase(), command);

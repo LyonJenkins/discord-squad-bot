@@ -1,10 +1,10 @@
 import { EventEmitter } from 'events';
-import { servers } from '../../../config';
+import { servers } from '../../config';
 import { Events } from './index';
-import RconConnection from '../../rcon/main';
-import { fetchPlayers } from '../../database/player';
-import { fetchKills } from '../../database/kill';
-import { getSteamUser } from '../../functions';
+import RconConnection from '../rcon/main';
+import { fetchPlayers } from '../database/player';
+import { fetchKills } from '../database/kill';
+import { getSteamUser } from '../functions';
 
 const Discord = require('discord.js');
 const Gamedig = require('gamedig');
@@ -154,8 +154,8 @@ export default class Server extends EventEmitter {
 	async sameTeam(victim, killer) {
 		await this.getServerPlayers();
 		const players = this.players;
-		const playerVictim = players.find(x => x.steam64ID === victim);
-		const playerKiller = players.find(x => x.steam64ID === killer);
+		const playerVictim = players.find(x => x.steam64ID === victim),
+			  playerKiller = players.find(x => x.steam64ID === killer);
 		if(playerVictim && playerKiller) {
 			return playerVictim.teamID === playerKiller.teamID;
 		} else {
