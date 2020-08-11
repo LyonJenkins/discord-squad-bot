@@ -111,6 +111,7 @@ export default class Events {
 						killer: killer[0].steam64ID,
 						weapon: data.weapon,
 						teamkill: teamkill,
+						server: this.server.name,
 						createdTimestamp: data.time
 					};
 					const embed = new Discord.MessageEmbed()
@@ -126,7 +127,18 @@ export default class Events {
 						.setTimestamp();
 					this.killLogChannel.send(embed);
 					if(teamkill) {
-						this.logChannel.send(embed);
+						const teamkillEmbed = new Discord.MessageEmbed()
+							.setColor('#FFFF00')
+							.setTitle(`Teamkill`)
+							.addFields(
+								{ name: 'Victim', value: `${data.victim}` },
+								{ name: 'Killer', value: `${killer[0].name}` },
+								{ name: 'Teamkill', value: `${teamkill}` },
+								{ name: 'Action Timestamp', value: `${data.time}` },
+							)
+							.setFooter(this.server.name)
+							.setTimestamp();
+						this.logChannel.send(teamkillEmbed);
 					}
 					newKill(newKillObj);
 				});
