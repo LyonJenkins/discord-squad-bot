@@ -12,6 +12,9 @@ export default class RconConnection {
             host: serverInfo.ip, port: serverInfo.rconPort, password: serverInfo.password
         });
 
+        this.rcon.on('error', error => {
+            console.log(error);
+        });
     }
 
     async listPlayers() {
