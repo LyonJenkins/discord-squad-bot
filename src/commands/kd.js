@@ -16,7 +16,11 @@ export default {
 			if(data === undefined) {
 				return message.reply('that player does not exist.');
 			}
-			const kdr = (data.kills / data.deaths).toFixed();
+			const formatter = new Intl.NumberFormat('en-US', {
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2,
+			});
+			const kdr = formatter.format(data.kills / data.deaths);
 			const kdrEmbed = new Discord.MessageEmbed()
 				.setColor('#0099ff')
 				.setTitle(`Kills and Deaths for ${data.foundPlayer.name}`)

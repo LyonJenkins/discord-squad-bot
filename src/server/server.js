@@ -230,7 +230,11 @@ export default class Server extends EventEmitter {
 			const kdPlayer = killsAndDeaths[i];
 			position+=`${(i+1)}\n`;
 			playerNames+=`${kdPlayer.name}\n`;
-			playerKdr+=`${kdPlayer.playerKills/kdPlayer.playerDeaths}\n`;
+			const formatter = new Intl.NumberFormat('en-US', {
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2,
+			});
+			playerKdr+=`${formatter.format(kdPlayer.playerKills/kdPlayer.playerDeaths)}\n`;
 			i++;
 		}
 
