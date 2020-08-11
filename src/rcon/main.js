@@ -12,11 +12,6 @@ export default class RconConnection {
             host: serverInfo.ip, port: serverInfo.rconPort, password: serverInfo.password
         });
 
-        this.rcon.on('end', () => {
-            this.rcon = Rcon.connect({
-                host: serverInfo.ip, port: serverInfo.rconPort, password: serverInfo.password
-            });
-        });
     }
 
     async listPlayers() {
