@@ -7,6 +7,7 @@ import ping from './ping';
 import addSignup from './addSignup';
 import kd from './kd'
 import leaderboard from './leaderboard';
+import restartServer from './restartServer';
 
 export default [
 	serverInfo,
@@ -17,5 +18,6 @@ export default [
 	ping,
 	addSignup,
 	kd,
-	leaderboard
+	leaderboard,
+	restartServer
 ];
