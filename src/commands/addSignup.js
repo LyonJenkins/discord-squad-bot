@@ -26,7 +26,10 @@ export default {
 			signupChanges.send(signupEmbed).then(msg => {
 				newSignup(signupMessage, msg.id);
 			});
-			message.reply('added signup');
+			message.reply('added signup.').then(msg => {
+				msg.delete({timeout: 5000});
+				message.delete({timeout: 5000});
+			});
 		}).catch(error => {
 			console.log(error);
 			if(error) return message.reply('there was an error trying to execute this command.');
