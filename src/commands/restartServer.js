@@ -27,5 +27,5 @@ export default {
 }
 
 async function restartServer(server) {
-	const { stdout, stderr } = await exec(server.restartBat);
+	return await exec(server.restartBat);
 }
