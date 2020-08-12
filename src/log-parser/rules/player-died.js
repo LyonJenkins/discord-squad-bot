@@ -5,7 +5,7 @@ export default {
 			time: args[1],
 			victim: args[3],
 			attackerPlayerController: args[5],
-			weapon: args[6]
+			role: args[6]
 		};
 		logParser.server.emit('PLAYER_DIED', data);
 	}
