@@ -34,6 +34,9 @@ export default class Events {
 		this.server.on('CLIENT_LOGIN', data => {
 			this.clientLogin(data)
 		});
+		this.server.on('PLAYER_WOUND', data => {
+			this.playerWound(data);
+		});
 	}
 
 	tickRate(data) {
@@ -99,20 +102,26 @@ export default class Events {
 		if(!serverLogging) return;
 		this.server.getPlayerByName(data.victim).then(victim => {
 			this.server.getPlayerByController(data.attackerPlayerController).then(killer => {
-				if(victim === undefined) {
-					victim = { steam64ID: data.victim };
+				if(victim === undefined || killer.length === 0) {
+					return console.log('PLAYER_DIED victim undefined || killer not found');
 				}
-				if(killer.length === 0) {
-					killer[0] = { steam64ID: data.attackerPlayerController, name: undefined };
-				}
-				this.server.sameTeam(victim.steam64ID, killer[0].steam64ID).then(teamkill => {
+				this.server.getPlayerBySteam64ID(killer[0].steam64ID).then(killerPlayer => {
+					if(killerPlayer === undefined) {
+						return console.log('PLAYER_DIED killerPlayer undefined');
+					}
+					const teamkill = killerPlayer.teamID === victim.teamID;
 					const newKillObj = {
-						victim: victim.steam64ID,
-						killer: killer[0].steam64ID,
-						weapon: data.weapon,
-						teamkill: teamkill,
+						victim: victim,
+						victimSteamID: victim.steam64ID,
+						killer: killerPlayer.name,
+						killerSteamID: killer.steamID,
+						role: data.role,
+						teamkill,
+						map: this.server.map,
+						players: this.server.players,
 						server: this.server.name,
-						createdTimestamp: data.time
+						createdTimestamp: data.time,
+						wound: false,
 					};
 					const embed = new Discord.MessageEmbed()
 						.setColor('#0099ff')
@@ -126,21 +135,49 @@ export default class Events {
 						.setFooter(this.server.name)
 						.setTimestamp();
 					this.killLogChannel.send(embed);
+					newKill(newKillObj);
+				});
+			});
+		});
+	}
+
+	playerWound(data) {
+		this.server.getPlayerByName(data.victim).then(victim => {
+			this.server.getPlayerByController(data.attackerPlayerController).then(attacker => {
+				if(victim === undefined || attacker.length === 0) {
+					return console.log('PLAYER_WOUNDED victim undefined || killer not found');
+				}
+				this.server.getPlayerBySteam64ID(attacker.steam64ID).then(attackerPlayer => {
+					if(attackerPlayer === undefined) return console.log('PLAYER_WOUNDED ATTACK PLAYER undefined');
+					const teamkill = attackerPlayer.teamID === victim.teamID;
+					const newIncapObject = {
+						victim: victim,
+						victimSteamID: victim.steam64ID,
+						killer: attacker[0].name,
+						killerSteamID: attacker[0].steamID,
+						teamkill,
+						weapon: data.weapon,
+						map: this.server.map,
+						players: this.server.players,
+						server: this.server.name,
+						createdTimestamp: data.time,
+						wound: true
+					};
 					if(teamkill) {
 						const teamkillEmbed = new Discord.MessageEmbed()
 							.setColor('#FFFF00')
 							.setTitle(`Teamkill`)
 							.addFields(
-								{ name: 'Victim', value: `${data.victim}` },
-								{ name: 'Killer', value: `${killer[0].name}` },
-								{ name: 'Teamkill', value: `${teamkill}` },
-								{ name: 'Action Timestamp', value: `${data.time}` },
+								{ name: 'Victim', value: `${newIncapObject.victim}` },
+								{ name: 'Killer', value: `${newIncapObject.victim}` },
+								{ name: 'Teamkill', value: `${newIncapObject.teamkill}` },
+								{ name: 'Action Timestamp', value: `${newIncapObject.createdTimestamp}` },
 							)
 							.setFooter(this.server.name)
 							.setTimestamp();
 						this.logChannel.send(teamkillEmbed);
 					}
-					newKill(newKillObj);
+					newKill(newIncapObject);
 				});
 			});
 		});
