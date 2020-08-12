@@ -45,8 +45,9 @@ export default class Server extends EventEmitter {
 			const leaderboardRefresh = setInterval(() => {
 				this.updateLeaderboards(15).then(embed => {
 					this.leaderBoardChannel.messages.fetch(leaderboardMessageID).then(msg => {
-						if(embed === undefined) return;
-						msg.edit(embed);
+						if(embed !== undefined) {
+							msg.edit(embed);
+						}
 					});
 				});
 
