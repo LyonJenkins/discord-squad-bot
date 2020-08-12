@@ -45,7 +45,7 @@ function updateSignups(signup, message) {
 			for(const reaction of list) {
 				let userlist = "";
 				for(const user of reaction.users) {
-					userlist+=user+"\n";
+					userlist+=user.username+"\n";
 				}
 				signupEmbed.addField(reaction.emoji, userlist);
 			}
