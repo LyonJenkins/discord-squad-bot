@@ -1,6 +1,6 @@
 import { log } from '../functions';
 import { servers } from '../../config';
-import { exec } from 'child_process';
+const { exec } = require('child_process');
 
 export default {
 	name: 'restartServer',
