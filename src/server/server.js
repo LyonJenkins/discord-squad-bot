@@ -203,8 +203,8 @@ export default class Server extends EventEmitter {
 			return undefined;
 		} else {
 			foundPlayer = foundPlayer[0];
-			const kills = await fetchKills({killer: foundPlayer.steam64ID, teamkill: false, wound: false});
-			const deaths = await fetchKills({victim: foundPlayer.steam64ID, teamkill: false, wound: false});
+			const kills = await fetchKills({killerSteamID: foundPlayer.steam64ID, teamkill: false, wound: false});
+			const deaths = await fetchKills({victimSteamID: foundPlayer.steam64ID, teamkill: false, wound: false});
 			return {
 				kills: kills.length,
 				deaths: deaths.length,
@@ -219,8 +219,8 @@ export default class Server extends EventEmitter {
 		const players = await fetchPlayers();
 		let killsAndDeaths = [];
 		for(const player of players) {
-			const playerKd = { playerKills: kills.filter(x => x.killer === player.steam64ID).length,
-				playerDeaths: kills.filter(x => x.victim === player.steam64ID).length,
+			const playerKd = { playerKills: kills.filter(x => x.killerSteamID === player.steam64ID).length,
+				playerDeaths: kills.filter(x => x.victimSteamID === player.steam64ID).length,
 				name: player.name
 			};
 			if(playerKd.playerKills === 0 || playerKd.playerDeaths === 0) {
