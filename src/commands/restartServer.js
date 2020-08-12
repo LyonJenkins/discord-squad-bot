@@ -1,6 +1,7 @@
 import { log } from '../functions';
 import { servers } from '../../config';
-const { exec } = require('child_process');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 
 export default {
 	name: 'restartServer',
@@ -14,16 +15,15 @@ export default {
 		log(`Entered ${this.name} command file`);
 		const server = servers.find(x => x.name === args[0]);
 		if (server) {
-			exec(server.restartBat, (err, stdout, stderr) => {
-				if(err) {
-					console.log(err);
-					console.log('error executing restart command');
-				}
-
-				message.reply(`restarted ${server.name} server.`);
+			restartServer(server).then(() => {
+				message.reply('restarted server.');
 			})
 		} else {
 			return message.reply('that server was not found.')
 		}
 	}
+}
+
+async function restartServer(server) {
+	const { stdout, stderr } = await exec(server.restartBat);
 }
