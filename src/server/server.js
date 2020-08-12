@@ -45,6 +45,7 @@ export default class Server extends EventEmitter {
 			const leaderboardRefresh = setInterval(() => {
 				this.updateLeaderboards(15).then(embed => {
 					this.leaderBoardChannel.messages.fetch(leaderboardMessageID).then(msg => {
+						if(embed === undefined) return;
 						msg.edit(embed);
 					});
 				});
@@ -212,6 +213,7 @@ export default class Server extends EventEmitter {
 
 	async updateLeaderboards(limit) {
 		const kills = await fetchKills({teamkill: false, wound: false});
+		if(kills.length === 0) return undefined;
 		const players = await fetchPlayers();
 		let killsAndDeaths = [];
 		for(const player of players) {

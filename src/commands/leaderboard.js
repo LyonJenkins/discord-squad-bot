@@ -13,6 +13,7 @@ export default {
 		log(`Entered ${this.name} command file`);
 
 		server.updateLeaderboards(parseInt(args[0])).then(embed => {
+			if(embed === undefined) return;
 			message.channel.send(embed);
 		});
 	}
