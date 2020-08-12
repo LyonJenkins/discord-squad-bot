@@ -13,7 +13,12 @@ export default class RconConnection {
         await this.rcon.connect();
 
         this.rcon.on('end', () => {
+            console.log('rcon end');
             this.rcon.connect();
+        });
+
+        this.rcon.on('error', error => {
+            console.log(error);
         });
     }
 
