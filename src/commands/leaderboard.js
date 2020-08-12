@@ -13,7 +13,7 @@ export default {
 		log(`Entered ${this.name} command file`);
 
 		server.updateLeaderboards(parseInt(args[0])).then(embed => {
-			if(embed === undefined) return;
+			if(embed === undefined) return message.reply('there are no kills in the database, or an error has occurred.');
 			message.channel.send(embed);
 		});
 	}
