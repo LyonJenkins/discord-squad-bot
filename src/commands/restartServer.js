@@ -17,7 +17,9 @@ export default {
 		if (server) {
 			restartServer(server).then(() => {
 				message.reply('restarted server.');
-			})
+			}).catch(error => {
+				console.log(error);
+			});
 		} else {
 			return message.reply('that server was not found.')
 		}
