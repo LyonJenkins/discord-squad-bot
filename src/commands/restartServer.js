@@ -17,10 +17,10 @@ export default {
 			exec(server.restartBat, (err, stdout, stderr) => {
 				if(err) {
 					console.log(err);
-					return;
+					console.log('error executing restart command');
 				}
-				console.log(stdout);
-				console.log(stderr);
+
+				message.reply(`restarted ${server.name} server.`);
 			})
 		} else {
 			return message.reply('that server was not found.')
