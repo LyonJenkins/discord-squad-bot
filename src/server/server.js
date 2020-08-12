@@ -199,6 +199,8 @@ export default class Server extends EventEmitter {
 
 		if(foundPlayer.length === 0) {
 			return undefined;
+		} else if(foundPlayer.length > 1) {
+			return undefined;
 		} else {
 			foundPlayer = foundPlayer[0];
 			const kills = await fetchKills({killer: foundPlayer.steam64ID, teamkill: false, wound: false});
