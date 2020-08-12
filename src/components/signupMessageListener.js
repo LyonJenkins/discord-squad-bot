@@ -45,7 +45,7 @@ function updateSignups(signup, message) {
 			for(const reaction of list) {
 				let userlist = "";
 				for(const user of reaction.users) {
-					userlist+=user.username+"\n";
+					userlist+=user+"\n";
 				}
 				signupEmbed.addField(reaction.emoji, userlist);
 			}
@@ -66,7 +66,7 @@ async function generateReactionList(reactions) {
 		const users = await reaction.users.fetch();
 		const reactionUsers = users.array();
 		for(const user of reactionUsers) {
-			usersObject.users.push(user.toString());
+			usersObject.users.push(user.username);
 		}
 		usersArray.push(usersObject);
 	}
