@@ -156,6 +156,12 @@ export default class Server extends EventEmitter {
 		return players.find(x => x.username === name);
 	}
 
+	async getPlayerBySteam64ID(id) {
+		await this.getServerPlayers();
+		const players = this.players;
+		return players.find(x => x.steam64ID === id);
+	}
+
 	async getPlayerByController(playerController) {
 		return await fetchPlayers({ playerController });
 	}
@@ -194,8 +200,8 @@ export default class Server extends EventEmitter {
 			return undefined;
 		} else {
 			foundPlayer = foundPlayer[0];
-			const kills = await fetchKills({killer: foundPlayer.steam64ID, teamkill: false});
-			const deaths = await fetchKills({victim: foundPlayer.steam64ID, teamkill: false});
+			const kills = await fetchKills({killer: foundPlayer.steam64ID, teamkill: false, wound: false});
+			const deaths = await fetchKills({victim: foundPlayer.steam64ID, teamkill: false, wound: false});
 			return {
 				kills: kills.length,
 				deaths: deaths.length,
@@ -205,7 +211,7 @@ export default class Server extends EventEmitter {
 	}
 
 	async updateLeaderboards(limit) {
-		const kills = await fetchKills({teamkill: false});
+		const kills = await fetchKills({teamkill: false, wound: false});
 		const players = await fetchPlayers();
 		let killsAndDeaths = [];
 		for(const player of players) {
