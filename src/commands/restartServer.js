@@ -1,7 +1,7 @@
 import { log } from '../functions';
 import { servers } from '../../config';
 const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+const exec = util.promisify(require('child_process').execFile);
 
 export default {
 	name: 'restartServer',
