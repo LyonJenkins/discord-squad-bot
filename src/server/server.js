@@ -43,13 +43,13 @@ export default class Server extends EventEmitter {
 				});
 			}, 30000);
 			const leaderboardRefresh = setInterval(() => {
-				this.updateLeaderboards(10).then(embed => {
+				this.updateLeaderboards(15).then(embed => {
 					this.leaderBoardChannel.messages.fetch(leaderboardMessageID).then(msg => {
 						msg.edit(embed);
 					});
 				});
 
-			}, 86400000)
+			}, 3600000)
 		});
 	}
 
