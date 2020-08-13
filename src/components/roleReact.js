@@ -13,7 +13,7 @@ export default {
 			await handleReaction(reaction);
 
 			const message = reaction.message;
-			reactionGiveRole(message, reaction, user, false);
+			reactionGiveRole(message, reaction, user, true);
 		});
 	}
 }
