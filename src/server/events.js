@@ -1,8 +1,7 @@
 import { LogParser } from '../log-parser';
-import { seedingChannelID, serverLogChannelID, serverLogging, serverStatusMessageID, killLogChannelID } from '../../config';
+import { seedingChannelID, serverLogChannelID, serverLogging, serverStatusMessageID, killLogChannelID, chatTriggers } from '../../config';
 import { fetchPlayers, newPlayer, updatePlayer } from '../database/player';
 import { newKill } from '../database/kill';
-
 const Discord = require('discord.js');
 
 export default class Events {
@@ -189,22 +188,21 @@ export default class Events {
 	}
 
 	chatMessage(data) {
-		console.log(data);
-		if(data.text.toLowerCase().indexOf('!admin') > -1) {
-			let timestamp = Date.now();
-
-			const embed = new Discord.MessageEmbed()
-				.setColor('#0099ff')
-				.setTitle(`Admin Request`)
-				.addFields(
-					{ name: 'Name', value: `${data.name}` },
-					{ name: 'Steam ID', value: `${data.steam64ID}` },
-					{ name: 'Chat Type', value: `${data.chat}` },
-					{ name: 'Action Timestamp', value: `${timestamp}` },
-				)
-				.setFooter(this.server.name)
-				.setTimestamp();
-			this.logChannel.send(embed);
+		for(const trigger of chatTriggers) {
+			if(data.text.toLowerCase().indexOf(trigger) > -1) {
+				const embed = new Discord.MessageEmbed()
+					.setColor('#0099ff')
+					.setTitle(`Admin Request`)
+					.addFields(
+						{ name: 'Name', value: `${data.name}`, inline: true },
+						{ name: 'Steam ID', value: `${data.steam64ID}`, inline: true },
+						{ name: 'Chat Type', value: `${data.chat}`, inline: true },
+						{ name: 'Message Text', value: `${data.text}` },
+					)
+					.setFooter(this.server.name)
+					.setTimestamp();
+				this.logChannel.send(embed);
+			}
 		}
 	}
 }
