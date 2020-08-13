@@ -1,13 +1,14 @@
-const { Rcon } = require("rcon-client");
+import { Rcon } from '../../rcon-client'
 
 export default class RconConnection {
-    constructor(server) {
+    constructor(selectedServer, server) {
+        this.selectedServer = selectedServer;
         this.server = server;
     }
 
     async main() {
         this.rcon = new Rcon({
-            host: this.server.ip, port: this.server.rconPort, password: this.server.password
+            host: this.selectedServer.ip, port: this.selectedServer.rconPort, password: this.selectedServer.password
         });
 
         await this.rcon.connect();
@@ -15,6 +16,10 @@ export default class RconConnection {
         this.rcon.on('end', async () => {
             console.log('rcon end');
             await this.rcon.connect();
+        });
+
+        this.rcon.on('chatMessage', message => {
+            this.server.emit('CHAT_MESSAGE', message);
         });
 
         this.rcon.on('error', error => {

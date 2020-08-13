@@ -37,6 +37,9 @@ export default class Events {
 		this.server.on('PLAYER_WOUND', data => {
 			this.playerWound(data);
 		});
+		this.server.on('CHAT_MESSAGE', data => {
+			this.chatMessage(data);
+		});
 	}
 
 	tickRate(data) {
@@ -98,9 +101,9 @@ export default class Events {
 		}
 	}
 
-	playerDied(data) {
+	playerDied(eventData) {
 		if(!serverLogging) return;
-		this.getVictimAndAttacker(data.victim, data.attackerPlayerController).then(data => {
+		this.getVictimAndAttacker(eventData.victim, eventData.attackerPlayerController).then(data => {
 			if(data === undefined) return undefined;
 			const attacker = data.attacker, victim = data.victim;
 			const teamkill = attacker.teamID === victim.teamID;
@@ -110,10 +113,10 @@ export default class Events {
 				killer: attacker,
 				killerSteamID: attacker.steamID,
 				teamkill,
-				role: data.role,
-				createdTimestamp: data.time,
+				role: eventData.role,
+				createdTimestamp: eventData.time,
 				map: this.server.map,
-				players: this.server.players,
+				players: this.server.playerCount,
 				server: this.server.name,
 				wound: false
 			};
@@ -122,7 +125,7 @@ export default class Events {
 				.setTitle(`New Kill`)
 				.addFields(
 					{ name: 'Victim', value: `${data.victim}` },
-					{ name: 'Killer', value: `${killer[0].name}` },
+					{ name: 'Killer', value: `${attacker.name}` },
 					{ name: 'Teamkill', value: `${teamkill}` },
 					{ name: 'Action Timestamp', value: `${data.time}` },
 				)
@@ -133,8 +136,8 @@ export default class Events {
 		});
 	}
 
-	playerWound(data) {
-		this.getVictimAndAttacker(data.victim, data.attackerPlayerController).then(data => {
+	playerWound(eventData) {
+		this.getVictimAndAttacker(eventData.victim, eventData.attackerPlayerController).then(data => {
 			if(data === undefined) return undefined;
 			const attacker = data.attacker, victim = data.victim;
 			const teamkill = attacker.teamID === victim.teamID;
@@ -144,10 +147,10 @@ export default class Events {
 				killer: attacker,
 				killerSteamID: attacker.steamID,
 				teamkill,
-				weapon: data.weapon,
-				createdTimestamp: data.time,
+				weapon: eventData.weapon,
+				createdTimestamp: eventData.time,
 				map: this.server.map,
-				players: this.server.players,
+				players: this.server.playerCount,
 				server: this.server.name,
 				wound: true
 			};
@@ -183,6 +186,26 @@ export default class Events {
 	serverUpdate() {
 		setActivity(this.server);
 		setMessage(this.server);
+	}
+
+	chatMessage(data) {
+		console.log(data);
+		if(data.text.toLowerCase().indexOf('!admin') > -1) {
+			let timestamp = Date.now();
+
+			const embed = new Discord.MessageEmbed()
+				.setColor('#0099ff')
+				.setTitle(`Admin Request`)
+				.addFields(
+					{ name: 'Name', value: `${data.name}` },
+					{ name: 'Steam ID', value: `${data.steam64ID}` },
+					{ name: 'Chat Type', value: `${data.chat}` },
+					{ name: 'Action Timestamp', value: `${timestamp}` },
+				)
+				.setFooter(this.server.name)
+				.setTimestamp();
+			this.logChannel.send(embed);
+		}
 	}
 }
 
