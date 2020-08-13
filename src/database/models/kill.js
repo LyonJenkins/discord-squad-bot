@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
 
 const Kill = new mongoose.Schema({
-	killer: String,
-	victim: String,
+	killer: Object,
+	killerSteamID: String,
+	victim: Object,
+	victimSteamID: String,
 	role: String,
 	weapon: String,
 	map: String,
