@@ -25,6 +25,7 @@ export default class Server extends EventEmitter {
 		this.tickRate = 0;
 		this.client = client;
 		this.players = [];
+		this.leaderBoardChannel = this.client.channels.cache.find(channel => channel.id === leaderboardChannelID);
 	}
 
 	main() {
@@ -78,7 +79,6 @@ export default class Server extends EventEmitter {
 		this.reservedSlots = data.reservedSlots;
 		this.publicQueue = data.publicQueue;
 		this.reservedQueue = data.reservedQueue;
-		this.leaderBoardChannel = this.client.channels.cache.find(channel => channel.id === leaderboardChannelID);
 		this.name = data.name;
 	}
 
