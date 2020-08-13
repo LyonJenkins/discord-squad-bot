@@ -1,1 +1,0 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault");var _moment=_interopRequireDefault(require("moment"));Object.defineProperty(exports,"__esModule",{value:!0}),exports["default"]=log;function log(a){var b=(0,_moment["default"])().format();console.log("[".concat(b,"] ").concat(a))}

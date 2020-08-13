@@ -6,3 +6,4 @@ gen
 node_modules
 config.json
 SquadGame.log
+dist
