@@ -1,0 +1,5 @@
+{
+    "name": "rcon-client",
+    "main": "lib",
+    "typings": "lib"
+}

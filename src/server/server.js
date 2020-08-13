@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { leaderboardChannelID, leaderboardMessageID, servers } from '../../config';
 import { Events } from './index';
-import RconConnection from '../rcon/main';
+import Rcon from '../rcon/main';
 import { fetchPlayers } from '../database/player';
 import { fetchKills } from '../database/kill';
 import { getSteamUser } from '../functions';
@@ -31,7 +31,7 @@ export default class Server extends EventEmitter {
 	main() {
 		const events = new Events(this);
 		events.main();
-		this.rcon = new RconConnection(this.server);
+		this.rcon = new Rcon(this.server, this);
 		this.rcon.main();
 		this.setServerData().then(() => {
 			this.emit('SERVER_UPDATE');
