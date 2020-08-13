@@ -192,7 +192,7 @@ export default class Events {
 			if(data.text.toLowerCase().indexOf(trigger) > -1) {
 				const embed = new Discord.MessageEmbed()
 					.setColor('#0099ff')
-					.setTitle(`Admin Request`)
+					.setTitle('Chat Trigger')
 					.addFields(
 						{ name: 'Name', value: `${data.name}`, inline: true },
 						{ name: 'Steam ID', value: `${data.steam64ID}`, inline: true },
