@@ -11,12 +11,15 @@ export default class RconConnection {
             host: this.selectedServer.ip, port: this.selectedServer.rconPort, password: this.selectedServer.password
         });
 
-        await this.rcon.connect();
+        this.connect().catch(error => {
+            console.log(error);
+        });
 
         this.rcon.on('end', async () => {
             console.log('rcon end');
-            const connect = await this.rcon.connect();
-            console.log(connect);
+            this.connect().catch(error => {
+                console.log(error);
+            });
         });
 
         this.rcon.on('chatMessage', message => {
@@ -24,8 +27,13 @@ export default class RconConnection {
         });
 
         this.rcon.on('error', error => {
+            log('RCON Error');
             console.log(error);
         });
+    }
+
+    async connect() {
+        await this.rcon.connect();
     }
 
     async listPlayers() {
