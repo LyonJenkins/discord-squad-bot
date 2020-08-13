@@ -15,7 +15,8 @@ export default class RconConnection {
 
         this.rcon.on('end', async () => {
             console.log('rcon end');
-            await this.rcon.connect();
+            const connect = await this.rcon.connect();
+            console.log(connect);
         });
 
         this.rcon.on('chatMessage', message => {
@@ -26,7 +27,6 @@ export default class RconConnection {
             console.log(error);
         });
     }
-
 
     async listPlayers() {
         return await this.rcon.send('ListPlayers').then(response => {
