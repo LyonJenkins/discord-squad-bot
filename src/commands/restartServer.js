@@ -15,7 +15,7 @@ export default {
 		log(`Entered ${this.name} command file`);
 		const server = servers.find(x => x.name === args[0]);
 		if (server) {
-			message.reply(`restarted server ${server.name}`);
+			message.reply(`restarted server ${server.name}.`);
 			restartServer(server).then(() => {
 
 			}).catch(error => {
