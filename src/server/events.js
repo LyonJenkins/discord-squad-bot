@@ -87,7 +87,7 @@ export default class Events {
 					if(player[0]) {
 						let updatePlayerObj = {};
 						updatePlayerObj.history = player[0].history;
-						updatePlayerObj.history.push({name: player[0].name, seen: data.time});
+						updatePlayerObj.history.push({name: player[0].name, seen: data.time, server: this.server.name});
 						updatePlayerObj.playerController = lastLoggedPlayer.playerController;
 						updatePlayer(player[0]._id, updatePlayerObj);
 					} else {
