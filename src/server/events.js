@@ -123,10 +123,10 @@ export default class Events {
 				.setColor('#0099ff')
 				.setTitle(`New Kill`)
 				.addFields(
-					{ name: 'Victim', value: `${data.victim}` },
-					{ name: 'Killer', value: `${attacker.name}` },
+					{ name: 'Victim', value: `${attacker.username}` },
+					{ name: 'Killer', value: `${attacker.username}` },
 					{ name: 'Teamkill', value: `${teamkill}` },
-					{ name: 'Action Timestamp', value: `${data.time}` },
+					{ name: 'Action Timestamp', value: `${eventData.time}` },
 				)
 				.setFooter(this.server.name)
 				.setTimestamp();
@@ -158,9 +158,8 @@ export default class Events {
 					.setColor('#FFFF00')
 					.setTitle(`Teamkill`)
 					.addFields(
-						{ name: 'Victim', value: `${newWound.victim}` },
-						{ name: 'Killer', value: `${newWound.victim}` },
-						{ name: 'Teamkill', value: `${newWound.teamkill}` },
+						{ name: 'Victim', value: `${victim.username}` },
+						{ name: 'Killer', value: `${attacker.username}` },
 						{ name: 'Action Timestamp', value: `${newWound.createdTimestamp}` },
 					)
 					.setFooter(this.server.name)
