@@ -193,7 +193,7 @@ export default class Events {
 
 	chatMessage(data) {
 		for(const trigger of chatTriggers) {
-			if(data.text.toLowerCase().startsWith(trigger)) {
+			if(data.text.toLowerCase().indexOf(trigger) > -1) {
 				const embed = new Discord.MessageEmbed()
 					.setColor('#0099ff')
 					.setTitle('Chat Trigger')
@@ -205,6 +205,7 @@ export default class Events {
 					)
 					.setFooter(this.server.name)
 					.setTimestamp();
+				this.server.rcon.warn(data.steam64ID, 'Admins have been notified of your request.');
 				this.logChannel.send(embed);
 			}
 		}
