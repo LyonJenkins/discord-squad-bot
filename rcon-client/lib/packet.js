@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.PacketType = exports.decodePacket = exports.encodePacket = void 0;
 function encodePacket(packet) {
     const buffer = Buffer.alloc(packet.payload.length + 14);
     buffer.writeInt32LE(packet.payload.length + 10, 0);

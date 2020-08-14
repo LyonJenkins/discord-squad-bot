@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createSplitter = void 0;
 const stream_1 = require("stream");
 /**
   Creates a transform stream which splits / combines the buffer chunks to single messages.

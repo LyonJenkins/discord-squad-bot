@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Rcon = void 0;
 const net_1 = require("net");
 const packet_1 = require("./packet");
 const splitter_1 = require("./splitter");
@@ -63,7 +64,7 @@ class Rcon {
             .on("data", this.handlePacket.bind(this));
         this.socket.on('data', data => {
             const packet = packet_1.decodePacket(data);
-            if (packet.type = 1) {
+            if (packet.type == 1) {
                 const string = packet.payload.toString('utf8');
                 const message = string.match(/\[(ChatAll|ChatTeam|ChatSquad|ChatAdmin)] \[SteamID:([0-9]{17})] (.+?) : (.*)/);
                 if (message) {

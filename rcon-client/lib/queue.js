@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.PromiseQueue = void 0;
 class PromiseQueue {
     constructor(maxConcurrent = 1) {
         this.maxConcurrent = maxConcurrent;
