@@ -10,14 +10,14 @@ for(const command of commands.default) {
 }
 
 import { BOT_TOKEN } from '../config';
-import components from './components';
+import plugins from './plugins';
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
     const server = new Server(selectedServer, client);
     server.main();
-    for(const component of components) {
-        component.execute(client, server);
+    for(const plugin of plugins) {
+        plugin.execute(client, server);
     }
 });
 

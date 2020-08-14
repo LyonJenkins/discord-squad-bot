@@ -1,13 +1,11 @@
 import roleReact from './roleReact';
 import serverRefreshReaction from './serverRefreshReaction';
-import signupMessageListener from './signupMessageListener';
-import newSignup from './newSignup';
+import signup from './signup';
 import commandHandler from './commandHandler';
 
 export default [
 	roleReact,
 	serverRefreshReaction,
-	signupMessageListener,
-	newSignup,
+	signup,
 	commandHandler
 ];

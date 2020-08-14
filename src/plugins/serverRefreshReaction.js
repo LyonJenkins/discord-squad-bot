@@ -11,7 +11,7 @@ export default {
 			}
 			if(message.embeds[0]) {
 				if(message.embeds[0].footer) {
-					if(message.embeds[0].footer.text === 'Server Status powered by Blueberries') {
+					if(message.embeds[0].footer.text === `${server.name} Server Status`) {
 						log('Server Status embed found');
 						reaction.remove();
 						log('Removed reaction from Server Status message');
