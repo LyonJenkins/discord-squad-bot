@@ -1,5 +1,5 @@
 import { log } from '../functions';
-import { newSignup } from '../database/signup';
+import { newSignup } from '../database/controllers/signup';
 import { signupsChannelID, signupChangesID } from '../../config';
 const Discord = require('discord.js');
 
