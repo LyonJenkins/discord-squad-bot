@@ -105,7 +105,7 @@ export class Rcon {
 
         this.socket.on('data', data => {
            const packet = decodePacket(data);
-           if(packet.type = 1) {
+           if(packet.type == 1) {
                const string = packet.payload.toString('utf8')
                const message = string.match(/\[(ChatAll|ChatTeam|ChatSquad|ChatAdmin)] \[SteamID:([0-9]{17})] (.+?) : (.*)/);
                if(message) {
