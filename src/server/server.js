@@ -66,7 +66,7 @@ export default class Server extends EventEmitter {
 				{ name: 'Current Layer', value: this.map, inline: true },
 			)
 			.setTimestamp()
-			.setFooter('Server Status powered by Blueberries');
+			.setFooter(`${this.name} Server Status`);
 	}
 
 	async setServerData() {
