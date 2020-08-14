@@ -41,4 +41,10 @@ export default class RconConnection {
             return response;
         });
     }
+
+    async warnPlayer(steamid, reason) {
+        return await this.rcon.send(`AdminWarn ${steamid} ${reason}`).then(response => {
+            return response;
+        })
+    }
 }

@@ -205,7 +205,7 @@ export default class Events {
 					)
 					.setFooter(this.server.name)
 					.setTimestamp();
-				this.server.rcon.warn(data.steam64ID, 'Admins have been notified of your request.');
+				this.server.rcon.warnPlayer(data.steam64ID, 'Admins have been notified of your request.').then();
 				this.logChannel.send(embed);
 			}
 		}
