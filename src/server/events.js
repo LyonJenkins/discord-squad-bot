@@ -1,7 +1,7 @@
 import { LogParser } from '../log-parser';
 import { seedingChannelID, serverLogChannelID, serverLogging, serverStatusMessageID, killLogChannelID, chatTriggers } from '../../config';
-import { fetchPlayers, newPlayer, updatePlayer } from '../database/player';
-import { newKill } from '../database/kill';
+import { fetchPlayers, newPlayer, updatePlayer } from '../database/controllers/player';
+import { newKill } from '../database/controllers/kill';
 const Discord = require('discord.js');
 
 export default class Events {
@@ -83,16 +83,21 @@ export default class Events {
 			const lastLoggedPlayer = this.unhandledLogins.find(x => x.id === data.id);
 			if(lastLoggedPlayer) {
 				this.unhandledLogins.splice(this.unhandledLogins.indexOf(lastLoggedPlayer), 1);
-				const newPlayerObj = {
-					name: data.name,
-					steam64ID: data.steam64ID,
-					playerController: lastLoggedPlayer.playerController,
-					createdTimestamp: data.time
-				};
 				fetchPlayers({steam64ID: data.steam64ID}).then(player => {
 					if(player[0]) {
-						updatePlayer(player[0]._id, newPlayerObj);
+						let updatePlayerObj = {};
+						updatePlayerObj.history = player[0].history;
+						updatePlayerObj.history.push({name: player[0].name, seen: data.time});
+						updatePlayerObj.playerController = lastLoggedPlayer.playerController;
+						updatePlayer(player[0]._id, updatePlayerObj);
 					} else {
+						const newPlayerObj = {
+							name: data.name,
+							steam64ID: data.steam64ID,
+							playerController: lastLoggedPlayer.playerController,
+							createdTimestamp: data.time,
+							history: []
+						};
 						newPlayer(newPlayerObj);
 					}
 				});
