@@ -123,7 +123,7 @@ export default class Events {
 				.setColor('#0099ff')
 				.setTitle(`New Kill`)
 				.addFields(
-					{ name: 'Victim', value: `${attacker.username}` },
+					{ name: 'Victim', value: `${victim.username}` },
 					{ name: 'Killer', value: `${attacker.username}` },
 					{ name: 'Teamkill', value: `${teamkill}` },
 					{ name: 'Action Timestamp', value: `${eventData.time}` },
