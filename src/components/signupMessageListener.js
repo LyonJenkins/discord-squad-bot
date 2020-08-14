@@ -1,4 +1,4 @@
-import { fetchSignups } from '../database/signup';
+import { fetchSignups } from '../database/controllers/signup';
 import { signupsChannelID, signupChangesID } from '../../config';
 import { handleReaction } from '../functions';
 const Discord = require('discord.js');

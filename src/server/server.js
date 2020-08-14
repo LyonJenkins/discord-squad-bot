@@ -2,8 +2,8 @@ import { EventEmitter } from 'events';
 import { leaderboardChannelID, leaderboardMessageID, servers } from '../../config';
 import { Events } from './index';
 import Rcon from '../rcon/main';
-import { fetchPlayers } from '../database/player';
-import { fetchKills } from '../database/kill';
+import { fetchPlayers } from '../database/controllers/player';
+import { fetchKills } from '../database/controllers/kill';
 import { getSteamUser } from '../functions';
 
 const Discord = require('discord.js');
