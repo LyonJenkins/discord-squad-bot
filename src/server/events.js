@@ -193,7 +193,7 @@ export default class Events {
 
 	chatMessage(data) {
 		for(const trigger of chatTriggers) {
-			if(data.text.toLowerCase().indexOf(trigger) > -1) {
+			if(data.text.toLowerCase().startsWith(trigger)) {
 				const embed = new Discord.MessageEmbed()
 					.setColor('#0099ff')
 					.setTitle('Chat Trigger')
