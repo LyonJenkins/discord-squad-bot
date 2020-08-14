@@ -15,7 +15,7 @@ export default class RconConnection {
             console.log(error);
         });
 
-        this.rcon.on('end', async () => {
+        this.rcon.on('end', () => {
             console.log('rcon end');
             this.connect().catch(error => {
                 console.log(error);
