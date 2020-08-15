@@ -165,7 +165,12 @@ export default class Server extends EventEmitter {
 	}
 
 	async getPlayerByController(playerController) {
-		return await fetchPlayers({ playerController });
+		const player = await fetchPlayers({ playerController });
+		if(player[0]) {
+			return await this.getPlayerBySteam64ID(player[0].steam64ID);
+		} else {
+			return undefined;
+		}
 	}
 
 	async sameTeam(victim, killer) {

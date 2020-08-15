@@ -176,14 +176,11 @@ export default class Events {
 	}
 
 	async getVictimAndAttacker(victimName, attackerController) {
-		const attackerDB = await this.server.getPlayerByController(attackerController);
-		if(attackerDB.length === 0) return undefined;
-		const attackerServer = await this.server.getPlayerBySteam64ID(attackerDB[0].steam64ID);
-		if(attackerServer === undefined) return undefined;
-		const victimServer = await this.server.getPlayerByName(victimName);
-		if(victimServer === undefined) return undefined;
-		attackerServer.databaseName = attackerDB.name;
-		return { victim: victimServer, attacker: attackerServer};
+		const attacker = await this.server.getPlayerByController(attackerController);
+		if(attacker === undefined) return undefined;
+		const victim = await this.server.getPlayerByName(victimName);
+		if(victim === undefined) return undefined;
+		return { victim, attacker};
 	}
 
 	serverUpdate() {
