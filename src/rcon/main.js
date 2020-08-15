@@ -1,4 +1,5 @@
 import { Rcon } from '../../rcon-client'
+import { log } from '../functions';
 
 export default class RconConnection {
     constructor(selectedServer, server) {
