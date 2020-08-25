@@ -10,13 +10,25 @@ export default {
 		});
 
 		client.on('messageReactionAdd', async (reaction, user) => {
-			await handleReaction(reaction);
+			if (reaction.partial) {
+				try {
+					await reaction.fetch();
+				} catch (error) {
+					console.log('Something went wrong when fetching the message: ', error);
+				}
+			}
 			const message = reaction.message;
 			signupMessageListener(message, reaction, user, false);
 		});
 
 		client.on('messageReactionRemove', async (reaction, user) => {
-			await handleReaction(reaction);
+			if (reaction.partial) {
+				try {
+					await reaction.fetch();
+				} catch (error) {
+					console.log('Something went wrong when fetching the message: ', error);
+				}
+			}
 			const message = reaction.message;
 			signupMessageListener(message, reaction, user, false);
 		});
