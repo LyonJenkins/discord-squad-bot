@@ -31,7 +31,7 @@ class Rcon {
     }
     async connect() {
         if (this.socket) {
-            throw new Error("Already connected or connecting");
+            return;
         }
         const socket = this.socket = net_1.connect({
             host: this.config.host,
