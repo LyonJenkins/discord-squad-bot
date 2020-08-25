@@ -8,6 +8,7 @@ import addSignup from './addSignup';
 import kd from './kd'
 import leaderboard from './leaderboard';
 import restartServer from './restartServer';
+import test from './test';
 
 export default [
 	serverInfo,
@@ -19,5 +20,6 @@ export default [
 	addSignup,
 	kd,
 	leaderboard,
-	restartServer
+	restartServer,
+	test
 ];
