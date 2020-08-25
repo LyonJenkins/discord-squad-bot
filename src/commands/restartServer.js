@@ -1,4 +1,4 @@
-import { log } from '../functions';
+import { log } from '../utilities';
 import { servers } from '../../config';
 const util = require('util');
 const exec = util.promisify(require('child_process').execFile);

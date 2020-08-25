@@ -1,5 +1,5 @@
 const fs = require('fs');
-import { log, getSteamUser } from '../functions';
+import { log, getSteamUser } from '../utilities';
 import { servers, defaultServer } from '../../config';
 
 export default {

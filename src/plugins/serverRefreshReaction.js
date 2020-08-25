@@ -1,4 +1,4 @@
-import { log, handleReaction } from '../functions';
+import { log, handleReaction } from '../utilities';
 
 export default {
 	execute(client, server) {

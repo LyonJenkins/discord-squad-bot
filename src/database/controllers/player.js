@@ -1,6 +1,6 @@
 import { Player } from '../models';
 import { connect } from '../main';
-import { log } from '../../functions';
+import { log } from '../../utilities';
 
 export async function fetchPlayers(key) {
 	connect();

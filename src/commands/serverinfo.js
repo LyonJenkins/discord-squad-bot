@@ -1,5 +1,5 @@
 import { servers } from '../../config';
-import { log } from '../functions';
+import { log } from '../utilities';
 const Gamedig = require('gamedig');
 const Discord = require('discord.js');
 

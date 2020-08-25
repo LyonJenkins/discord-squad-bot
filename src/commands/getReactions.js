@@ -1,5 +1,5 @@
 import { signupsChannelID } from '../../config';
-import { log } from '../functions';
+import { log } from '../utilities';
 
 export default {
 	name: 'getReactions',

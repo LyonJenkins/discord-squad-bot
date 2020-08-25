@@ -1,5 +1,5 @@
 import { adminRoles, prefix } from '../../config';
-import { properArgs } from '../functions';
+import { properArgs } from '../utilities';
 
 export default {
 	execute(client, server) {

@@ -1,4 +1,4 @@
-import { log } from '../functions';
+import { log } from '../utilities';
 const Discord = require('discord.js');
 
 

@@ -1,4 +1,4 @@
-import { handleReaction, log } from '../functions';
+import { handleReaction, log } from '../utilities';
 import { addRoleMessageIDs } from '../../config';
 
 export default {

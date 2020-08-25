@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-import { log } from '../functions';
+import { log } from '../utilities';
 
 export default {
 	name: 'leaderboard',
