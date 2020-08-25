@@ -107,7 +107,7 @@ export default class Events {
 
 	playerDied(eventData) {
 		if(!serverLogging) return;
-		this.getVictimAndAttacker(eventData.victim, eventData.attackerPlayerController).then(data => {
+		this.server.getVictimAndAttacker(eventData.victim, eventData.attackerPlayerController).then(data => {
 			if(data === undefined) return undefined;
 			const attacker = data.attacker, victim = data.victim;
 			const teamkill = attacker.teamID === victim.teamID;
@@ -141,7 +141,7 @@ export default class Events {
 	}
 
 	playerWound(eventData) {
-		this.getVictimAndAttacker(eventData.victim, eventData.attackerPlayerController).then(data => {
+		this.server.getVictimAndAttacker(eventData.victim, eventData.attackerPlayerController).then(data => {
 			if(data === undefined) return undefined;
 			const attacker = data.attacker, victim = data.victim;
 			const teamkill = attacker.teamID === victim.teamID;
@@ -173,14 +173,6 @@ export default class Events {
 			}
 			newKill(newWound);
 		});
-	}
-
-	async getVictimAndAttacker(victimName, attackerController) {
-		const attacker = await this.server.getPlayerByController(attackerController);
-		if(attacker === undefined) return undefined;
-		const victim = await this.server.getPlayerByName(victimName);
-		if(victim === undefined) return undefined;
-		return { victim, attacker};
 	}
 
 	serverUpdate() {

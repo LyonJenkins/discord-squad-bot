@@ -209,6 +209,14 @@ export default class Server extends EventEmitter {
 		}
 	}
 
+	async getVictimAndAttacker(victimName, attackerController) {
+		const attacker = await this.server.getPlayerByController(attackerController);
+		if(attacker === undefined) return undefined;
+		const victim = await this.server.getPlayerByName(victimName);
+		if(victim === undefined) return undefined;
+		return { victim, attacker};
+	}
+
 	async updateLeaderboards(limit) {
 		const kills = await fetchKills({teamkill: false, wound: false});
 		if(kills.length === 0) return undefined;
