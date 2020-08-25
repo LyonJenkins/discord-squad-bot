@@ -21,6 +21,10 @@ export default class RconConnection {
             await this.reconnect();
         });
 
+        this.rcon.on('connect', () => {
+            console.log('RCON connected.');
+        });
+
         this.rcon.on('chat_message', message => {
             this.server.emit('CHAT_MESSAGE', message);
         });
@@ -36,7 +40,7 @@ export default class RconConnection {
     }
 
     async reconnect() {
-        console.log(`Attempting to RCON reconnection to ${this.selectedServer.name}.`);
+        console.log(`Attempting to RCON reconnection to server ${this.selectedServer.name}.`);
         try {
             await this.connect();
         } catch(err) {
