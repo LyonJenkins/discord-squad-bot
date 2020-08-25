@@ -23,7 +23,7 @@ interface Events {
     authenticated: () => void;
     end: () => void;
     error: (error: any) => void;
-    chatMessage: (message: any) => void;
+    chat_message: (message: any) => void;
 }
 export declare class Rcon {
     static connect(config: RconOptions): Promise<Rcon>;
@@ -34,9 +34,9 @@ export declare class Rcon {
     emitter: TypedEmitter<Events>;
     socket: Socket | null;
     authenticated: boolean;
-    on: <E extends "error" | "end" | "connect" | "authenticated" | "chatMessage">(event: E, listener: Events[E]) => TypedEmitter<Events>;
-    once: <E extends "error" | "end" | "connect" | "authenticated" | "chatMessage">(event: E, listener: Events[E]) => TypedEmitter<Events>;
-    off: <E extends "error" | "end" | "connect" | "authenticated" | "chatMessage">(event: E, listener: Events[E]) => TypedEmitter<Events>;
+    on: <E extends "error" | "end" | "connect" | "authenticated" | "chat_message">(event: E, listener: Events[E]) => TypedEmitter<Events>;
+    once: <E extends "error" | "end" | "connect" | "authenticated" | "chat_message">(event: E, listener: Events[E]) => TypedEmitter<Events>;
+    off: <E extends "error" | "end" | "connect" | "authenticated" | "chat_message">(event: E, listener: Events[E]) => TypedEmitter<Events>;
     constructor(config: RconOptions);
     connect(): Promise<this>;
     /**

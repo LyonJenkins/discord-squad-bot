@@ -35,7 +35,7 @@ interface Events {
     authenticated: () => void
     end: () => void
     error: (error: any) => void
-    chatMessage: (message: any) => void
+    chat_message: (message: any) => void
 }
 
 export class Rcon {
@@ -115,7 +115,7 @@ export class Rcon {
                        name: message[3],
                        text: message[4]
                    };
-                   this.emitter.emit("chatMessage", data);
+                   this.emitter.emit("chat_message", data);
                }
            }
         });

@@ -1,7 +1,7 @@
 {
-    "name": "rcon-client",
+    "name": "squad-rcon-client",
     "version": "1.0.0",
-    "description": "A modern RCON client made for Minecraft that features a packet queue",
+    "description": "A modified RCON client for usage with Squad.",
     "main": "lib",
     "typings": "lib",
     "scripts": {

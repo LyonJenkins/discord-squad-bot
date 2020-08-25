@@ -1,5 +1,5 @@
 import { Rcon } from '../../rcon-client'
-import { log } from '../functions';
+import { log } from '../utilities';
 
 export default class RconConnection {
     constructor(selectedServer, server) {
@@ -23,7 +23,7 @@ export default class RconConnection {
             });
         });
 
-        this.rcon.on('chatMessage', message => {
+        this.rcon.on('chat_message', message => {
             this.server.emit('CHAT_MESSAGE', message);
         });
 
@@ -43,9 +43,9 @@ export default class RconConnection {
         });
     }
 
-    async warnPlayer(steamid, reason) {
-        return await this.rcon.send(`AdminWarn ${steamid} ${reason}`).then(response => {
+    async warnPlayer(steamID, reason) {
+        return await this.rcon.send(`AdminWarn ${steamID} ${reason}`).then(response => {
             return response;
-        })
+        });
     }
 }

@@ -74,7 +74,7 @@ class Rcon {
                         name: message[3],
                         text: message[4]
                     };
-                    this.emitter.emit("chatMessage", data);
+                    this.emitter.emit("chat_message", data);
                 }
             }
         });
