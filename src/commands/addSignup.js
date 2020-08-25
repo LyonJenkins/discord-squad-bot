@@ -8,7 +8,7 @@ export default {
 	description: 'addSignup',
 	usage: '',
 	args: true,
-	guildOnly: false,
+	guildOnly: true,
 	disabled: false,
 	adminOnly: true,
 	execute(message, args) {

@@ -7,7 +7,7 @@ export default {
 	description: 'New line test',
 	usage: '',
 	args: false,
-	guildOnly: false,
+	guildOnly: true,
 	disabled: false,
 	adminOnly: true,
 	execute(message, args) {

@@ -7,7 +7,7 @@ export default {
     description: 'Adds the specified Steam 64 ID or the Steam 64 ID from the profile specified to the whitelist.',
     usage: '<steam64id or steam profile url>',
     args: true,
-    guildOnly: false,
+    guildOnly: true,
     aliases: ['wl'],
     disabled: false,
     execute(message, args) {

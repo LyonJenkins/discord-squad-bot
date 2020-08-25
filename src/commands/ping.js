@@ -7,7 +7,7 @@ export default {
 	description: 'Pong!',
 	usage: '',
 	args: false,
-	guildOnly: false,
+	guildOnly: true,
 	disabled: false,
 	adminOnly: true,
 	execute(message, args) {

@@ -6,7 +6,7 @@ export default {
 	description: 'Returns leaderboard shiet',
 	usage: '',
 	args: true,
-	guildOnly: false,
+	guildOnly: true,
 	disabled: false,
 	adminOnly: true,
 	execute(message, args, server) {

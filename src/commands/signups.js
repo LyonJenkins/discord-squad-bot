@@ -5,7 +5,7 @@ export default {
 	description: 'Pings members for specified signup',
 	usage: '',
 	args: true,
-	guildOnly: false,
+	guildOnly: true,
 	disabled: false,
 	adminOnly: true,
 	execute(message, args) {

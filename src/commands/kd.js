@@ -6,7 +6,7 @@ export default {
 	description: 'Returns KDR',
 	usage: '',
 	args: true,
-	guildOnly: false,
+	guildOnly: true,
 	disabled: false,
 	adminOnly: false,
 	execute(message, args, server) {
