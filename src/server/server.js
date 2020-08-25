@@ -4,7 +4,7 @@ import { Events } from './index';
 import Rcon from '../rcon/main';
 import { fetchPlayers } from '../database/controllers/player';
 import { fetchKills } from '../database/controllers/kill';
-import { getSteamUser } from '../functions';
+import { getSteamUser } from '../utilities';
 
 const Discord = require('discord.js');
 const Gamedig = require('gamedig');
@@ -31,8 +31,10 @@ export default class Server extends EventEmitter {
 	main() {
 		const events = new Events(this);
 		events.main();
+
 		this.rcon = new Rcon(this.server, this);
 		this.rcon.main();
+
 		this.setServerData().then(() => {
 			this.emit('SERVER_UPDATE');
 			const serverDataRefresh = setInterval(() => {
@@ -168,18 +170,6 @@ export default class Server extends EventEmitter {
 		const player = await fetchPlayers({ playerController });
 		if(player[0]) {
 			return await this.getPlayerBySteam64ID(player[0].steam64ID);
-		} else {
-			return undefined;
-		}
-	}
-
-	async sameTeam(victim, killer) {
-		await this.getServerPlayers();
-		const players = this.players;
-		const playerVictim = players.find(x => x.steam64ID === victim),
-			  playerKiller = players.find(x => x.steam64ID === killer);
-		if(playerVictim && playerKiller) {
-			return playerVictim.teamID === playerKiller.teamID;
 		} else {
 			return undefined;
 		}
