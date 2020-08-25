@@ -3,7 +3,13 @@ import { log, handleReaction } from '../utilities';
 export default {
 	execute(client, server) {
 		client.on('messageReactionAdd', async (reaction, user) => {
-			await handleReaction(reaction);
+			if (reaction.partial) {
+				try {
+					await reaction.fetch();
+				} catch (error) {
+					console.log('Something went wrong when fetching the message: ', error);
+				}
+			}
 
 			const message = reaction.message;
 			if(message.author.id === user.id) {
