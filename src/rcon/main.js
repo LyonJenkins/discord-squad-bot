@@ -7,7 +7,7 @@ export default class RconConnection {
         this.server = server;
     }
 
-    async main() {
+    main() {
         this.rcon = new Rcon({
             host: this.selectedServer.ip, port: this.selectedServer.rconPort, password: this.selectedServer.password
         });
@@ -16,11 +16,9 @@ export default class RconConnection {
             console.log(error);
         });
 
-        this.rcon.on('end', () => {
-            console.log('rcon end');
-            this.connect().catch(error => {
-                console.log(error);
-            });
+        this.rcon.on('end', async () => {
+            console.log('RCON Connection closed.');
+            await this.reconnect();
         });
 
         this.rcon.on('chat_message', message => {
@@ -35,6 +33,18 @@ export default class RconConnection {
 
     async connect() {
         await this.rcon.connect();
+    }
+
+    async reconnect() {
+        console.log(`Attempting to RCON reconnection to ${this.selectedServer.name}.`);
+        try {
+            await this.connect();
+        } catch(err) {
+            console.log(err);
+        }
+        this.rcon.on('connect', () => {
+           console.log('Reconnection successful.');
+        });
     }
 
     async listPlayers() {
