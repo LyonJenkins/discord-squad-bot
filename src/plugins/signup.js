@@ -20,6 +20,23 @@ export default {
 			const message = reaction.message;
 			signupMessageListener(message, reaction, user, false);
 		});
+
+		client.on('messageDelete', async message => {
+			if(message.channel.id === signupsChannelID) {
+				const id = message.id,
+					signups = await fetchSignups(),
+					signup = signups.find(x => x.discordMessageID === id);
+				if(signup) {
+					const channel = message.client.channels.cache.get(signupChangesID);
+					if(!channel) return;
+					channel.messages.fetch(signup.discordSignupEmbedID).then(msg => {
+						if(msg) {
+							msg.delete();
+						}
+					});
+				}
+			}
+		});
 	}
 }
 
