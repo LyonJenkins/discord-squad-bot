@@ -210,9 +210,9 @@ export default class Server extends EventEmitter {
 	}
 
 	async getVictimAndAttacker(victimName, attackerController) {
-		const attacker = await this.server.getPlayerByController(attackerController);
+		const attacker = await this.getPlayerByController(attackerController);
 		if(attacker === undefined) return undefined;
-		const victim = await this.server.getPlayerByName(victimName);
+		const victim = await this.getPlayerByName(victimName);
 		if(victim === undefined) return undefined;
 		return { victim, attacker};
 	}
