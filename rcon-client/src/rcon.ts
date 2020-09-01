@@ -60,13 +60,13 @@ export class Rcon {
     off = this.emitter.removeListener.bind(this.emitter)
 
     constructor(config: RconOptions) {
-        this.config = { ...defaultOptions, ...config }
+        this.config = {...defaultOptions, ...config}
         this.sendQueue = new PromiseQueue(this.config.maxPending)
     }
 
     async connect() {
         if (this.socket) {
-            return;
+            throw new Error("Already connected or connecting")
         }
 
         const socket = this.socket = connect({
@@ -92,6 +92,23 @@ export class Rcon {
 
         this.emitter.emit("connect")
 
+        this.socket.on('data', data => {
+            const packet = decodePacket(data);
+            if (packet.type == 1) {
+                const string = packet.payload.toString('utf8')
+                const message = string.match(/\[(ChatAll|ChatTeam|ChatSquad|ChatAdmin)] \[SteamID:([0-9]{17})] (.+?) : (.*)/);
+                if (message) {
+                    const data = {
+                        chat: message[1],
+                        steam64ID: message[2],
+                        name: message[3],
+                        text: message[4]
+                    };
+                    this.emitter.emit("chat_message", data);
+                }
+            }
+        });
+
         this.socket.on("close", () => {
             this.emitter.emit("end")
             this.sendQueue.pause()
@@ -102,23 +119,6 @@ export class Rcon {
         this.socket
             .pipe(createSplitter())
             .on("data", this.handlePacket.bind(this))
-
-        this.socket.on('data', data => {
-           const packet = decodePacket(data);
-           if(packet.type == 1) {
-               const string = packet.payload.toString('utf8')
-               const message = string.match(/\[(ChatAll|ChatTeam|ChatSquad|ChatAdmin)] \[SteamID:([0-9]{17})] (.+?) : (.*)/);
-               if(message) {
-                   const data = {
-                       chat: message[1],
-                       steam64ID: message[2],
-                       name: message[3],
-                       text: message[4]
-                   };
-                   this.emitter.emit("chat_message", data);
-               }
-           }
-        });
 
         const id = this.requestId
         const packet = await this.sendPacket(PacketType.Auth, Buffer.from(this.config.password))
@@ -138,8 +138,8 @@ export class Rcon {
     }
 
     /**
-      Close the connection to the server.
-    */
+     Close the connection to the server.
+     */
     async end() {
         if (!this.socket || this.socket.connecting) {
             throw new Error("Not connected")
@@ -151,11 +151,10 @@ export class Rcon {
     }
 
     /**
-      Send a command to the server.
-
-      @param command The command that will be executed on the server.
-      @returns A promise that will be resolved with the command's response from the server.
-    */
+     Send a command to the server.
+     @param command The command that will be executed on the server.
+     @returns A promise that will be resolved with the command's response from the server.
+     */
     async send(command: string) {
         const payload = await this.sendRaw(Buffer.from(command, "utf-8"))
         return payload.toString("utf-8")
@@ -171,7 +170,7 @@ export class Rcon {
         const id = this.requestId++
 
         const createSendPromise = () => {
-            this.socket!.write(encodePacket({ id, type, payload }))
+            this.socket!.write(encodePacket({id, type, payload}))
 
             return new Promise<Packet>((resolve, reject) => {
                 const onEnd = () => (reject(new Error("Connection closed")), clearTimeout(timeout))

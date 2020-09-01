@@ -38,17 +38,16 @@ export declare class Rcon {
     once: <E extends "error" | "end" | "connect" | "authenticated" | "chat_message">(event: E, listener: Events[E]) => TypedEmitter<Events>;
     off: <E extends "error" | "end" | "connect" | "authenticated" | "chat_message">(event: E, listener: Events[E]) => TypedEmitter<Events>;
     constructor(config: RconOptions);
-    connect(): Promise<this | undefined>;
+    connect(): Promise<this>;
     /**
-      Close the connection to the server.
-    */
+     Close the connection to the server.
+     */
     end(): Promise<void>;
     /**
-      Send a command to the server.
-
-      @param command The command that will be executed on the server.
-      @returns A promise that will be resolved with the command's response from the server.
-    */
+     Send a command to the server.
+     @param command The command that will be executed on the server.
+     @returns A promise that will be resolved with the command's response from the server.
+     */
     send(command: string): Promise<string>;
     sendRaw(buffer: Buffer): Promise<Buffer>;
     private sendPacket;

@@ -31,7 +31,7 @@ class Rcon {
     }
     async connect() {
         if (this.socket) {
-            return;
+            throw new Error("Already connected or connecting");
         }
         const socket = this.socket = net_1.connect({
             host: this.config.host,
@@ -53,15 +53,6 @@ class Rcon {
         socket.setNoDelay(true);
         socket.on("error", error => this.emitter.emit("error", error));
         this.emitter.emit("connect");
-        this.socket.on("close", () => {
-            this.emitter.emit("end");
-            this.sendQueue.pause();
-            this.socket = null;
-            this.authenticated = false;
-        });
-        this.socket
-            .pipe(splitter_1.createSplitter())
-            .on("data", this.handlePacket.bind(this));
         this.socket.on('data', data => {
             const packet = packet_1.decodePacket(data);
             if (packet.type == 1) {
@@ -78,6 +69,15 @@ class Rcon {
                 }
             }
         });
+        this.socket.on("close", () => {
+            this.emitter.emit("end");
+            this.sendQueue.pause();
+            this.socket = null;
+            this.authenticated = false;
+        });
+        this.socket
+            .pipe(splitter_1.createSplitter())
+            .on("data", this.handlePacket.bind(this));
         const id = this.requestId;
         const packet = await this.sendPacket(packet_1.PacketType.Auth, Buffer.from(this.config.password));
         this.sendQueue.resume();
@@ -92,8 +92,8 @@ class Rcon {
         return this;
     }
     /**
-      Close the connection to the server.
-    */
+     Close the connection to the server.
+     */
     async end() {
         if (!this.socket || this.socket.connecting) {
             throw new Error("Not connected");
@@ -105,11 +105,10 @@ class Rcon {
         await new Promise(resolve => this.on("end", resolve));
     }
     /**
-      Send a command to the server.
-
-      @param command The command that will be executed on the server.
-      @returns A promise that will be resolved with the command's response from the server.
-    */
+     Send a command to the server.
+     @param command The command that will be executed on the server.
+     @returns A promise that will be resolved with the command's response from the server.
+     */
     async send(command) {
         const payload = await this.sendRaw(Buffer.from(command, "utf-8"));
         return payload.toString("utf-8");
