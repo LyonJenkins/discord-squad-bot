@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'GUILD_MEMBER'] });
+const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'GUILD_MEMBER', 'GUILD_PRESENCES'] });
 client.commands = new Discord.Collection();
 import * as commands from './commands';
 import { Server } from './server';
