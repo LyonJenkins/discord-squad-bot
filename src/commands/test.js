@@ -1,4 +1,3 @@
-import RconConnection from '../rcon/main';
 import { servers } from '../../config';
 import { log } from '../utilities';
 
@@ -13,9 +12,5 @@ export default {
 	execute(message, args) {
 		log(`Entered ${this.name} command file`);
 		const server = servers.find(x => x.name === 'Public');
-		const rcon = new RconConnection(server);
-		rcon.main();
-		rcon.connect();
-
 	}
 }
