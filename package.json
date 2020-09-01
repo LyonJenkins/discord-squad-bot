@@ -34,7 +34,7 @@
     "moment-timezone": "^0.5.31",
     "mongoose": "^5.9.28",
     "nodemon": "^2.0.4",
-    "rcon-client": "^4.2.2",
+    "squad-rcon-client": "file:rcon-client",
     "steamapi-node": "^2.0.3",
     "tail": "^2.0.4"
   },

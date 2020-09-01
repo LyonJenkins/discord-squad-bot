@@ -187,10 +187,10 @@ export default class Events {
 					.setColor('#0099ff')
 					.setTitle('Chat Trigger')
 					.addFields(
-						{ name: 'Name', value: `${data.name}`, inline: true },
+						{ name: 'Name', value: `${data.player}`, inline: true },
 						{ name: 'Steam ID', value: `${data.steam64ID}`, inline: true },
 						{ name: 'Chat Type', value: `${data.chat}`, inline: true },
-						{ name: 'Message Text', value: `${data.text}` },
+						{ name: 'Message Text', value: `${data.message}` },
 					)
 					.setFooter(this.server.name)
 					.setTimestamp();

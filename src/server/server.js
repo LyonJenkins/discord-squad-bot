@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { leaderboardChannelID, leaderboardMessageID, servers } from '../../config';
 import { Events } from './index';
-import Rcon from '../rcon/main';
+import Rcon from '../rcon/index';
 import { fetchPlayers } from '../database/controllers/player';
 import { fetchKills } from '../database/controllers/kill';
 import { getSteamUser } from '../utilities';
@@ -33,7 +33,7 @@ export default class Server extends EventEmitter {
 		events.main();
 
 		this.rcon = new Rcon(this.server, this);
-		this.rcon.main();
+		this.rcon.watch();
 
 		this.setServerData().then(() => {
 			this.emit('SERVER_UPDATE');
@@ -134,24 +134,7 @@ export default class Server extends EventEmitter {
 	}
 
 	async getServerPlayers() {
-		const response = await this.rcon.listPlayers();
-		const lines = response.split('\n');
-		let players = [];
-		const regex = /ID: ([0-9]*) \| SteamID: ([0-9]*) \| Name: ([\s\S]*) \| Team ID: ([0-9]*) \| Squad ID: ([\s\S]*)/;
-		for(const line of lines) {
-			const args = line.match(regex);
-			if(args) {
-				const playerObj = {
-					id: args[1],
-					steam64ID: args[2],
-					username: args[3],
-					teamID: args[4],
-					squadID: args[5]
-				};
-				players.push(playerObj);
-			}
-		}
-		this.players = players;
+		this.players = await this.rcon.listPlayers();
 	}
 
 	async getPlayerByName(name) {
