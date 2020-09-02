@@ -37,6 +37,7 @@ export default class Server extends EventEmitter {
 
 		this.setServerData().then(() => {
 			this.emit('SERVER_UPDATE');
+			this.updateLeaderBoardEmbed();
 			const serverDataRefresh = setInterval(() => {
 				this.parseServerData().then(data => {
 					if(data === undefined) return;
@@ -46,15 +47,18 @@ export default class Server extends EventEmitter {
 				});
 			}, 30000);
 			const leaderboardRefresh = setInterval(() => {
-				this.updateLeaderboards(15).then(embed => {
-					this.leaderBoardChannel.messages.fetch(leaderboardMessageID).then(msg => {
-						if(embed !== undefined) {
-							msg.edit(embed);
-						}
-					});
-				});
-
+				this.updateLeaderBoardEmbed();
 			}, 3600000)
+		});
+	}
+
+	updateLeaderBoardEmbed() {
+		this.updateLeaderboards(15).then(embed => {
+			this.leaderBoardChannel.messages.fetch(leaderboardMessageID).then(msg => {
+				if(embed !== undefined) {
+					msg.edit(embed);
+				}
+			});
 		});
 	}
 
