@@ -8,7 +8,7 @@ export default {
 	args: false,
 	guildOnly: true,
 	disabled: false,
-	adminOnly: true,
+	permissions: ["GROUP_LEADERS", "GROUP_DEV"],
 	execute(message, args) {
 		log(`Entered ${this.name} command file`);
 		const server = servers.find(x => x.name === 'Public');

@@ -9,7 +9,7 @@ export default {
 	args: false,
 	guildOnly: true,
 	disabled: false,
-	adminOnly: true,
+	permissions: ["GROUP_LEADERS", "GROUP_DEV"],
 	execute(message, args) {
 		log(`Entered ${this.name} command file`);
 		//addLine('\r\n[2020.07.05-02.10.35:294][324]LogSquad: USQGameState: Server Tick Rate: 26');

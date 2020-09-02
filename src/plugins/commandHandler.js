@@ -1,4 +1,4 @@
-import { adminRoles, prefix } from '../../config';
+import { roles, prefix } from '../../config';
 import { properArgs } from '../utilities';
 
 export default {
@@ -17,12 +17,15 @@ export default {
 					return;
 				}
 
-				if(command.adminOnly) {
-					let admin = false;
-					for(const roleID of adminRoles) {
-						if(message.member.roles.cache.find(role => role.id === roleID)) admin = true;
+				if(command.permissions) {
+					let allowed = false;
+					for(const roleName of command.permissions) {
+						const foundRole = roles.find(x => x.name === roleName);
+						if(foundRole) {
+							if(message.member.roles.cache.find(role => role.id === foundRole.groupID)) allowed = true;
+						}
 					}
-					if(!admin) return message.reply('you are not authorized to use that command.');
+					if(!allowed) return message.reply('you are not allowed to use that command.');
 				}
 
 				if (command.guildOnly && message.channel.type !== 'text') {
@@ -42,4 +45,8 @@ export default {
 			}
 		});
 	}
+}
+
+function hasPermissions(roleArr) {
+
 }

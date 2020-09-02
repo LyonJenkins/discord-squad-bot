@@ -8,7 +8,6 @@ export default {
 	args: true,
 	guildOnly: true,
 	disabled: false,
-	adminOnly: false,
 	execute(message, args, server) {
 		log(`Entered ${this.name} command file`);
 		const player = args.join(' ');

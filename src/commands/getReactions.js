@@ -7,7 +7,7 @@ export default {
 	args: true,
 	guildOnly: true,
 	disabled: false,
-	adminOnly: true,
+	permissions: ["GROUP_LEADERS", "GROUP_DEV"],
 	aliases: ['gr'],
 	execute(message, args, server) {
 		log(`Entered ${this.name} command file`);
