@@ -46,7 +46,3 @@ export default {
 		});
 	}
 }
-
-function hasPermissions(roleArr) {
-
-}
