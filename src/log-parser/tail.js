@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-const Tail = require('tail').Tail;
+import { Tail } from 'tail';
 
 
 export default class FileTail extends EventEmitter {
