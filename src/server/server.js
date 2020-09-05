@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { leaderboardChannelID, leaderboardMessageID, servers } from '../../config';
+import { leaderboardChannelID, leaderboardMessageID, servers, serverLogging } from '../../config';
 import { Events } from './index';
 import Rcon from '../rcon/index';
 import { fetchPlayers } from '../database/controllers/player';
@@ -31,9 +31,12 @@ export default class Server extends EventEmitter {
 	main() {
 		const events = new Events(this);
 		events.main();
-
-		this.rcon = new Rcon(this.server, this);
-		this.rcon.watch();
+		
+		
+		if(serverLogging) {
+			this.rcon = new Rcon(this.server, this);
+			this.rcon.watch();	
+		}
 
 		this.setServerData().then(() => {
 			this.emit('SERVER_UPDATE');
