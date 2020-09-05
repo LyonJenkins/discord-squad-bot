@@ -59,7 +59,7 @@ export default class Rcon {
 	}
 
 	async listPlayers() {
-		const response = await this.rcon.listPlayers();
+		const response = await this.execute('ListPlayers');
 		const lines = response.split('\n');
 		let players = [];
 		const regex = /ID: ([0-9]*) \| SteamID: ([0-9]*) \| Name: ([\s\S]*) \| Team ID: ([0-9]*) \| Squad ID: ([\s\S]*)/;
