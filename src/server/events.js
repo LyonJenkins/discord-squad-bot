@@ -141,6 +141,7 @@ export default class Events {
 	}
 
 	playerWound(eventData) {
+		if(!serverLogging) return;
 		this.server.getVictimAndAttacker(eventData.victim, eventData.attackerPlayerController).then(data => {
 			if(data === undefined) return undefined;
 			const attacker = data.attacker, victim = data.victim;
