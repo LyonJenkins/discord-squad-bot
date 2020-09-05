@@ -59,23 +59,22 @@ export default class Rcon {
 	}
 
 	async listPlayers() {
-		const response = await this.execute('ListPlayers');
-
-		const players = [];
-
-		for (const line of response.split('\n')) {
-			const match = line.match(
-				/ID: ([0-9]+) \| SteamID: ([0-9]{17}) \| Name: (.+) \| Team ID: ([0-9]+) \| Squad ID: ([0-9]+|N\/A)/
-			);
-			if (!match) continue;
-
-			players.push({
-				playerID: match[1],
-				steamID: match[2],
-				name: match[3],
-				teamID: match[4],
-				squadID: match[5] !== 'N/A' ? match[5] : null
-			});
+		const response = await this.rcon.listPlayers();
+		const lines = response.split('\n');
+		let players = [];
+		const regex = /ID: ([0-9]*) \| SteamID: ([0-9]*) \| Name: ([\s\S]*) \| Team ID: ([0-9]*) \| Squad ID: ([\s\S]*)/;
+		for(const line of lines) {
+			const args = line.match(regex);
+			if(args) {
+				const playerObj = {
+					id: args[1],
+					steam64ID: args[2],
+					username: args[3],
+					teamID: args[4],
+					squadID: args[5]
+				};
+				players.push(playerObj);
+			}
 		}
 
 		return players;
