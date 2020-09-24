@@ -16,6 +16,8 @@ export default {
 			const msg = await message.channel.send('**');
 			const discordRole = await message.guild.roles.fetch(role);
 			msg.edit(discordRole.toString());
+			msg.react('⬆️');
 		}
+		message.delete();
 	}
 }
