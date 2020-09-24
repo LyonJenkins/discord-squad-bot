@@ -211,9 +211,6 @@ function setMessage(server) {
 	if(seedingChannel) {
 		seedingChannel.messages.fetch(serverStatusMessageID).then(msg => {
 			const serverStatusMessage = msg;
-			msg.guild.members.fetch(server.client.user.id).then(member => {
-				member.setNickname(server.name);
-			});
 			if(serverStatusMessage) {
 				server.generateEmbed().then(embed => {
 					serverStatusMessage.edit(embed);

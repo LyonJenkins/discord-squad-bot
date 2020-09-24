@@ -9,6 +9,8 @@ import kd from './kd'
 import leaderboard from './leaderboard';
 import restartServer from './restartServer';
 import test from './test';
+import addRolesMessage from './addRolesMessage';
+import setNickname from './setNickname';
 
 export default [
 	serverInfo,
@@ -21,5 +23,7 @@ export default [
 	kd,
 	leaderboard,
 	restartServer,
-	test
+	test,
+	addRolesMessage,
+	setNickname
 ];
