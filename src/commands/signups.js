@@ -5,7 +5,7 @@ export default {
 	name: 'signups',
 	description: 'Pings members for specified signup',
 	usage: '',
-	args: false,
+	args: true,
 	guildOnly: true,
 	disabled: false,
 	permissions: ["GROUP_LEADERS", "GROUP_DEV"],
@@ -27,8 +27,10 @@ export default {
 		}
 		let notReactedMessage = `Users who are not reacted to that signup (${signup.url}): \n`;
 		for(const user of notReacted) {
-			const dm = await user.createDM();
-			dm.send(`You have not reacted to this signup ${signup.url}.`);
+			if(args[1]) {
+				const dm = await user.createDM();
+				dm.send(`You have not reacted to this signup ${signup.url}.`);
+			}
 			notReactedMessage+=user.toString()+'\n';
 		}
 		await message.channel.send(notReactedMessage);
