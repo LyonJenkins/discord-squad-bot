@@ -25,10 +25,10 @@ export default {
 				notReacted.push(comp);
 			}
 		}
-		let notReactedMessage = `Users who are not reacted to that signup (${message.url}): \n`;
+		let notReactedMessage = `Users who are not reacted to that signup (${signup.url}): \n`;
 		for(const user of notReacted) {
 			const dm = await user.createDM();
-			dm.send(`You have not reacted to this signup ${message.url}.`);
+			dm.send(`You have not reacted to this signup ${signup.url}.`);
 			notReactedMessage+=user.toString()+'\n';
 		}
 		await message.channel.send(notReactedMessage);
