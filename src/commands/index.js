@@ -11,6 +11,7 @@ import restartServer from './restartServer';
 import test from './test';
 import addRolesMessage from './addRolesMessage';
 import setNickname from './setNickname';
+import signups from './signups';
 
 export default [
 	serverInfo,
@@ -25,5 +26,6 @@ export default [
 	restartServer,
 	test,
 	addRolesMessage,
-	setNickname
+	setNickname,
+	signups
 ];
