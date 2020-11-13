@@ -1,6 +1,6 @@
 import { log } from '../utilities';
 import { newSignup } from '../database/controllers/signup';
-import { signupsChannelID, signupChangesID } from '../../config';
+import { signupsChannelID, signupListChannelID } from '../../config';
 const Discord = require('discord.js');
 
 export default {
@@ -17,7 +17,7 @@ export default {
 		const channel = message.client.channels.cache.get(signupsChannelID);
 		if(!channel) return message.reply('the signups channel specified in the config does not exist.');
 		channel.messages.fetch(args[0]).then(signupMessage => {
-			const signupChanges = message.client.channels.cache.get(signupChangesID);
+			const signupChanges = message.client.channels.cache.get(signupListChannelID);
 			const signupEmbed = new Discord.MessageEmbed()
 				.setTitle(`${message.content}`)
 				.setFooter(`${message.id}`)

@@ -1,4 +1,4 @@
-import { signupChangesID, signupsChannelID } from '../../config';
+import { signupListChannelID, signupsChannelID, signupChangesID } from '../../config';
 import { fetchSignups, newSignup } from '../database/controllers/signup';
 import { handleReaction, log } from '../utilities';
 const Discord = require('discord.js');
@@ -30,7 +30,7 @@ export default {
 				}
 			}
 			const message = reaction.message;
-			signupMessageListener(message, reaction, user, false);
+			signupMessageListener(message, reaction, user, true);
 		});
 
 		client.on('messageDelete', async message => {
@@ -39,7 +39,7 @@ export default {
 					signups = await fetchSignups(),
 					signup = signups.find(x => x.discordMessageID === id);
 				if(signup) {
-					const channel = message.client.channels.cache.get(signupChangesID);
+					const channel = message.client.channels.cache.get(signupListChannelID);
 					if(!channel) return;
 					channel.messages.fetch(signup.discordSignupEmbedID).then(msg => {
 						if(msg) {
@@ -55,7 +55,7 @@ export default {
 function newSignupsMessage(message) {
 	if (message.channel.id === signupsChannelID) {
 		log('New signup found in signups channel');
-		const channel = message.client.channels.cache.get(signupChangesID);
+		const channel = message.client.channels.cache.get(signupListChannelID);
 		if(!channel) return;
 		const signupEmbed = new Discord.MessageEmbed()
 			.setTitle(`${message.content}`)
@@ -72,6 +72,20 @@ function signupMessageListener(message, reaction, user, remove) {
 	fetchSignups().then((signups) => {
 		for(const signup of signups) {
 			if(signup.discordMessageID === message.id) {
+
+				let embedUpdate = new Discord.MessageEmbed();
+				embedUpdate.setTitle(signup.name);
+				embedUpdate.addField('User', user.toString());
+				embedUpdate.setTimestamp()
+				if(remove) {
+					embedUpdate.addField('Removed Reaction', reaction.emoji.toString());
+					embedUpdate.setColor('#d90f0f');
+				} else {
+					embedUpdate.addField('Added Reaction', reaction.emoji.toString());
+					embedUpdate.setColor('#0fd934');
+				}
+				const signupChangesChn = message.client.channels.cache.get(signupChangesID);
+				signupChangesChn.send(embedUpdate);
 				updateSignups(signup, message);
 			}
 		}
@@ -84,7 +98,7 @@ function updateSignups(signup, message) {
 	channel.messages.fetch(signup.discordMessageID).then(msg => {
 		const reactions = msg.reactions.cache.array();
 		generateReactionList(reactions).then(list => {
-			const signupChanges = message.client.channels.cache.get(signupChangesID);
+			const signupChanges = message.client.channels.cache.get(signupListChannelID);
 			if(!signupChanges) return;
 			let signupEmbed = new Discord.MessageEmbed()
 				.setTitle(`${message.content}`)
