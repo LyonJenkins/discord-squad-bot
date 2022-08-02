@@ -1,3 +1,6 @@
+# DEPRECATED
+This project is deprecated and has not been maintained or ran in years. However, while it was functioning, it ran smoothly. Feel free to look and use some of the features in here, I do not mind.
+
 # Squad Whitelisting Bot
 ## Requirements
 * NodeJS
